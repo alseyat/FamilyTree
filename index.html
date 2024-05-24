@@ -20,6 +20,7 @@
 
         .node text {
             font: 20px 'Noto Naskh Arabic', sans-serif;
+            /* Use Noto Naskh Arabic */
         }
 
         .link {
@@ -30,39 +31,57 @@
 
         #tree-container {
             overflow-x: auto;
+            /* Enable horizontal scrolling */
             overflow-y: auto;
+            /* Enable vertical scrolling */
             width: 100%;
             height: 100%;
+
         }
 
         svg {
             width: 2000px;
+            /* Set a large width to accommodate the tree */
             height: 5000px;
+            /* Initial height to avoid cutoff */
         }
 
         #toggleButton {
             position: absolute;
-            top: 130px;
-            left: 195px;
-            padding: 0px 10px;
+            /* Position the button at a fixed place */
+            top: 20px;
+            /* Distance from the top of the page */
+            left: 400px;
+            /* Distance from the left of the page */
+            padding: 10px 20px;
+            /* Padding inside the button */
             font-family: 'Noto Naskh Arabic', sans-serif;
-            font-size: 15px;
+            /* Font family */
+            font-size: 18px;
+            /* Font size */
             font-weight: normal;
-            background-color: #f2d4b0;
-            color: rgb(0, 0, 0);
+            /* Font weight */
+            background-color: #ffffff;
+            /* Background color */
+            color: rgb(5, 5, 5);
+            /* Text color */
             border: 2px solid black;
+            /* Remove border */
             border-radius: 10px;
+            /* Rounded corners */
             cursor: pointer;
+            /* Cursor on hover */
         }
 
         #toggleButton:hover {
-            background-color: #ec5d5d;
+            background-color: #aecfee;
+            /* Background color on hover */
         }
     </style>
 </head>
 
 <body>
-    <button id="toggleButton">اضغط هنا لعرض كامل الشجرة أو إغلاقها</button>
+    <button id="toggleButton">عرض كامل الشجرة</button>
     <div id="tree-container">
         <svg></svg>
     </div>
@@ -437,38 +456,9 @@
 
         const svg = d3.select("svg")
             .attr("width", width)
-            .attr("height", height);
-
-        // Add text to the SVG, positioned relative to the page
-        svg.append("text")
-            .attr("x", 300) // Position relative to the page
-            .attr("y", 40)
-            .attr("text-anchor", "middle")
-            .attr("font-family", 'Noto Naskh Arabic, sans-serif')
-            .attr("font-size", "30px")
-            .text("شجرة عشيرة السياط");
-
-            // Add text to the SVG, positioned relative to the page
-        svg.append("text")
-            .attr("x", 300) // Position relative to the page
-            .attr("y", 70)
-            .attr("text-anchor", "middle")
-            .attr("font-family", 'Noto Naskh Arabic, sans-serif')
-            .attr("font-size", "20px")
-            .text("من ذرية سياط بن عودة بن محمد بن علّيج بن محمد بن سليمان");
-
-            // Add text to the SVG, positioned relative to the page
-        svg.append("text")
-            .attr("x", 300) // Position relative to the page
-            .attr("y", 100)
-            .attr("text-anchor", "middle")
-            .attr("font-family", 'Noto Naskh Arabic, sans-serif')
-            .attr("font-size", "20px")
-            .text("بن نافع بن عمار بن زقروط الربيعي العبدي الشمري");
-
-        // Add the main group for the tree
-        const svgGroup = svg.append("g")
-            .attr("transform", "translate(100, 200)"); // Initial translation with increased top padding
+            .attr("height", height)
+            .append("g")
+            .attr("transform", "translate(100, 100)"); // Adjust the y-value to provide top padding
 
         // Set node size to control the distance between siblings and depth levels
         const tree = d3.tree().nodeSize([50, 150]); // [vertical, horizontal]
@@ -506,18 +496,19 @@
 
             // Calculate the minimum x-coordinate to adjust the tree position
             const minX = Math.min(...nodes.map(d => d.x));
-            const adjustment = Math.max(0, 200 - minX); // Ensure minimum padding of 200
+            const adjustment = Math.max(0, 100 - minX); // Ensure minimum padding of 100
 
             // Calculate the maximum x-coordinate to adjust the SVG height
             const maxX = Math.max(...nodes.map(d => d.x));
-            const newHeight = maxX + 200; // Add padding of 200
+            const newHeight = maxX + 100; // Add padding of 100
 
             // Adjust the tree position dynamically
-            svgGroup.attr("transform", `translate(100, ${adjustment})`);
+            svg.attr("transform", `translate(100, ${adjustment})`);
+
             // Adjust the SVG height dynamically
             d3.select("svg").attr("height", newHeight);
 
-            const node = svgGroup.selectAll('g.node')
+            const node = svg.selectAll('g.node')
                 .data(nodes, d => d.id || (d.id = ++i));
 
             const nodeEnter = node.enter().append('g')
@@ -569,7 +560,7 @@
             nodeExit.select('text')
                 .style('fill-opacity', 1e-6);
 
-            const link = svgGroup.selectAll('path.link')
+            const link = svg.selectAll('path.link')
                 .data(links, d => d.id);
 
             const linkEnter = link.enter().insert('path', "g")
