@@ -1,92 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Family Tree</title>
+    <title>Vertical Family Tree</title>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;700&display=swap');
-
-        .node {
-            cursor: pointer;
-        }
 
         .node rect {
             fill: #fff;
             stroke: steelblue;
-            stroke-width: 3px;
+            stroke-width: 1.5px;
         }
-
         .node text {
-            font: 20px 'Noto Naskh Arabic', sans-serif;
-            /* Use Noto Naskh Arabic */
-        }
+            font-family: 'Noto Naskh Arabic', sans-serif;
 
+        }
         .link {
             fill: none;
-            stroke: #908f8f;
-            stroke-width: 4px;
+            stroke: #040404;
+            stroke-width: 2px;
+        }
+        .node:hover {
+            cursor: pointer;
+        }
+        .node.has-children rect {
+            fill: lightblue;
+        }
+
+        .node.collapsed rect {
+            fill: blue;
         }
 
         #tree-container {
             overflow-x: auto;
-            /* Enable horizontal scrolling */
             overflow-y: auto;
-            /* Enable vertical scrolling */
             width: 100%;
             height: 100%;
-
         }
-
         svg {
-            width: 2000px;
-            /* Set a large width to accommodate the tree */
-            height: 5000px;
-            /* Initial height to avoid cutoff */
+            width: 10000px;
+            height: 10000px;
         }
-
-        #toggleButton {
+        #expand-collapse-btn {
             position: absolute;
-            /* Position the button at a fixed place */
-            top: 20px;
-            /* Distance from the top of the page */
-            left: 400px;
-            /* Distance from the left of the page */
-            padding: 10px 20px;
-            /* Padding inside the button */
-            font-family: 'Noto Naskh Arabic', sans-serif;
-            /* Font family */
-            font-size: 18px;
-            /* Font size */
-            font-weight: normal;
-            /* Font weight */
-            background-color: #ffffff;
-            /* Background color */
-            color: rgb(5, 5, 5);
-            /* Text color */
-            border: 2px solid black;
-            /* Remove border */
-            border-radius: 10px;
-            /* Rounded corners */
+            top: 10px;
+            left: 10px;
+            padding: 5px 5px;
+            background-color: lightgray;
+            border: 1px solid darkgray;
             cursor: pointer;
-            /* Cursor on hover */
-        }
-
-        #toggleButton:hover {
-            background-color: #aecfee;
-            /* Background color on hover */
         }
     </style>
 </head>
-
 <body>
-    <button id="toggleButton">عرض كامل الشجرة</button>
+    <div id="expand-collapse-btn">اضغط لعرض كامل<br>الشجرة أو إغلاقها</div>
     <div id="tree-container">
         <svg></svg>
     </div>
-
-    <script src="https://d3js.org/d3.v6.min.js"></script>
     <script>
         const data = {
             name: "سياط",
@@ -291,44 +262,56 @@
                                                                                 {
                                                                                     name: "هلال",
                                                                                     children: [
-                                                                                        { name: "سلمان",
-                                                                                    children: [
-                                                                                        { name: "أديب" },
-                                                                                        { name: "أمجد" },
-                                                                                        { name: "مجدي" },
-                                                                                        { name: "ماجد" },
-                                                                                        { name: "عبدالمجيد" },
-                                                                                        { name: "محمد" },
-                                                                                        { name: "أحمد" }
-                                                                                    ] },
-                                                                                        { name: "عبدالرحمن",
-                                                                                    children: [
-                                                                                        { name: "حسام" },
-                                                                                        { name: "سامر" },
-                                                                                        { name: "باسم" }
-                                                                                    ] },
-                                                                                        { name: "يوسف",
-                                                                                    children: [
-                                                                                        { name: "مهند" },
-                                                                                        { name: "هلال" }
-                                                                                    ] },
-                                                                                        { name: "موسى",
-                                                                                    children: [
-                                                                                        { name: "أحمد" },
-                                                                                        { name: "عبدالله" },
-                                                                                        { name: "محمد" },
-                                                                                        { name: "خالد" }
-                                                                                    ] },
-                                                                                        { name: "محمد",
-                                                                                    children: [
-                                                                                        { name: "خالد" },
-                                                                                        { name: "فيصل" },
-                                                                                        { name: "نواف" }
-                                                                                    ] },
-                                                                                        { name: "بدر",
-                                                                                    children: [
-                                                                                        { name: "هلال" }
-                                                                                    ] }
+                                                                                        {
+                                                                                            name: "سلمان",
+                                                                                            children: [
+                                                                                                { name: "أديب" },
+                                                                                                { name: "أمجد" },
+                                                                                                { name: "مجدي" },
+                                                                                                { name: "ماجد" },
+                                                                                                { name: "عبدالمجيد" },
+                                                                                                { name: "محمد" },
+                                                                                                { name: "أحمد" }
+                                                                                            ]
+                                                                                        },
+                                                                                        {
+                                                                                            name: "عبدالرحمن",
+                                                                                            children: [
+                                                                                                { name: "حسام" },
+                                                                                                { name: "سامر" },
+                                                                                                { name: "باسم" }
+                                                                                            ]
+                                                                                        },
+                                                                                        {
+                                                                                            name: "يوسف",
+                                                                                            children: [
+                                                                                                { name: "مهند" },
+                                                                                                { name: "هلال" }
+                                                                                            ]
+                                                                                        },
+                                                                                        {
+                                                                                            name: "موسى",
+                                                                                            children: [
+                                                                                                { name: "أحمد" },
+                                                                                                { name: "عبدالله" },
+                                                                                                { name: "محمد" },
+                                                                                                { name: "خالد" }
+                                                                                            ]
+                                                                                        },
+                                                                                        {
+                                                                                            name: "محمد",
+                                                                                            children: [
+                                                                                                { name: "خالد" },
+                                                                                                { name: "فيصل" },
+                                                                                                { name: "نواف" }
+                                                                                            ]
+                                                                                        },
+                                                                                        {
+                                                                                            name: "بدر",
+                                                                                            children: [
+                                                                                                { name: "هلال" }
+                                                                                            ]
+                                                                                        }
                                                                                     ]
                                                                                 }
                                                                             ]
@@ -346,21 +329,23 @@
                                                                                 {
                                                                                     name: "الحميدي",
                                                                                     children: [
-                                                                                        { name: "عبدالله",
-                                                                                    children: [
-                                                                                        { name: "سياط" }
-                                                                                    ] },
-                                                                                        { name: "محمد",
-                                                                                    children: [
-                                                                                        { name: "نواف" },
-                                                                                        { name: "عبدالله" },
-                                                                                        { name: "معن" },
-                                                                                        { name: "فيصل" }
-                                                                                    ] },
+                                                                                        {
+                                                                                            name: "عبدالله",
+                                                                                            children: [
+                                                                                                { name: "سياط" }
+                                                                                            ]
+                                                                                        },
+                                                                                        {
+                                                                                            name: "محمد",
+                                                                                            children: [
+                                                                                                { name: "نواف" },
+                                                                                                { name: "عبدالله" },
+                                                                                                { name: "معن" },
+                                                                                                { name: "فيصل" }
+                                                                                            ]
+                                                                                        },
                                                                                         { name: "خالد" },
                                                                                         { name: "بدر" }
-
-
                                                                                     ]
                                                                                 }
                                                                             ]
@@ -371,26 +356,34 @@
                                                                                 {
                                                                                     name: "عطاء",
                                                                                     children: [
-                                                                                        { name: "عبدالله",
-                                                                                    children: [
-                                                                                        { name: "فيصل" },
-                                                                                        { name: "مساعد" }
-                                                                                    ] },
-                                                                                        { name: "خالد",
-                                                                                    children: [
-                                                                                        { name: "وليد" }
-                                                                                    ] },
-                                                                                        { name: "خميس",
-                                                                                    children: [
-                                                                                        { name: "إلياس" }
-                                                                                    ] },
+                                                                                        {
+                                                                                            name: "عبدالله",
+                                                                                            children: [
+                                                                                                { name: "فيصل" },
+                                                                                                { name: "مساعد" }
+                                                                                            ]
+                                                                                        },
+                                                                                        {
+                                                                                            name: "خالد",
+                                                                                            children: [
+                                                                                                { name: "وليد" }
+                                                                                            ]
+                                                                                        },
+                                                                                        {
+                                                                                            name: "خميس",
+                                                                                            children: [
+                                                                                                { name: "إلياس" }
+                                                                                            ]
+                                                                                        },
                                                                                         { name: "أيمن" },
-                                                                                        { name: "محمد",
-                                                                                    children: [
-                                                                                        { name: "عبدالعزيز" },
-                                                                                        { name: "عمر" },
-                                                                                        { name: "حمد" }
-                                                                                    ] },
+                                                                                        {
+                                                                                            name: "محمد",
+                                                                                            children: [
+                                                                                                { name: "عبدالعزيز" },
+                                                                                                { name: "عمر" },
+                                                                                                { name: "حمد" }
+                                                                                            ]
+                                                                                        },
                                                                                         { name: "أحمد" },
                                                                                         { name: "عادل" },
                                                                                         { name: "أشرف" }
@@ -399,19 +392,18 @@
                                                                                 {
                                                                                     name: "ونيس",
                                                                                     children: [
-                                                                                        { name: "ونيس",
-                                                                                    children: [
-                                                                                        { name: "أحمد" },
-                                                                                        { name: "محمد" },
-                                                                                        { name: "عبدالعزيز" },
-                                                                                        { name: "خالد" },
-                                                                                        { name: "نواف" }
-                                                                                    ] }
+                                                                                        {
+                                                                                            name: "ونيس",
+                                                                                            children: [
+                                                                                                { name: "أحمد" },
+                                                                                                { name: "محمد" },
+                                                                                                { name: "عبدالعزيز" },
+                                                                                                { name: "خالد" },
+                                                                                                { name: "نواف" }
+                                                                                            ]
+                                                                                        }
                                                                                     ]
                                                                                 },
-
-
-
                                                                                 { name: "عبدالله" }
                                                                             ]
                                                                         },
@@ -447,31 +439,53 @@
                         { name: "سلمان" }
                     ]
                 },
-                { name: "حماد" },
+                { name: "حماد" }
             ]
         };
 
-        const width = 2000;
-        let height = 1200; // Initial height to avoid cutoff
+        const margin = { top: 150, right: 20, bottom: 20, left: 300 };
+        let width = 1200, height = 2000;
+
+        let i = 0, duration = 750;
+
+        const tree = d3.tree().nodeSize([120, 50]);
 
         const svg = d3.select("svg")
             .attr("width", width)
             .attr("height", height)
             .append("g")
-            .attr("transform", "translate(100, 100)"); // Adjust the y-value to provide top padding
+            .attr("transform", `translate(${margin.left},${margin.top})`);
 
-        // Set node size to control the distance between siblings and depth levels
-        const tree = d3.tree().nodeSize([50, 150]); // [vertical, horizontal]
-
-        let root = d3.hierarchy(data);
-
-        root.x0 = height / 2;
+        let root = d3.hierarchy(data, d => d.children);
+        root.x0 = width / 2;
         root.y0 = 0;
 
-        let i = 0;
-
-        // Collapse all nodes initially to show only the root
         collapse(root);
+
+        svg.append("text")
+    .attr("x", root.x) // Center horizontally
+    .attr("y", root.y0-110)
+    .attr("text-anchor", "middle")
+    .attr("font-family", 'Noto Naskh Arabic, sans-serif')
+    .attr("font-size", "30px")
+    .text("شجرة عشيرة السياط");
+
+    svg.append("text")
+    .attr("x", root.x) // Center horizontally
+    .attr("y", root.y0-80)
+    .attr("text-anchor", "middle")
+    .attr("font-family", 'Noto Naskh Arabic, sans-serif')
+    .attr("font-size", "20px")
+    .text("من ذرية سياط بن عودة بن محمد بن علّيج بن محمد بن سليمان");
+
+    svg.append("text")
+    .attr("x", root.x) // Center horizontally
+    .attr("y", root.y0-50)
+    .attr("text-anchor", "middle")
+    .attr("font-family", 'Noto Naskh Arabic, sans-serif')
+    .attr("font-size", "20px")
+    .text("بن نافع بن عمار بن زقروط الربيعي العبدي الشمري");
+
         function collapse(d) {
             if (d.children) {
                 d._children = d.children;
@@ -490,97 +504,112 @@
 
         function update(source) {
             const treeData = tree(root);
-
             const nodes = treeData.descendants();
             const links = treeData.descendants().slice(1);
 
-            // Calculate the minimum x-coordinate to adjust the tree position
-            const minX = Math.min(...nodes.map(d => d.x));
-            const adjustment = Math.max(0, 100 - minX); // Ensure minimum padding of 100
+            nodes.forEach(d => d.y = d.depth * 50);
 
-            // Calculate the maximum x-coordinate to adjust the SVG height
-            const maxX = Math.max(...nodes.map(d => d.x));
-            const newHeight = maxX + 100; // Add padding of 100
+            const minX = Math.min(...nodes.map(d => d.x)) - 200;
+            const maxX = Math.max(...nodes.map(d => d.x)) + 200;
+            const minY = Math.min(...nodes.map(d => d.y)) - 200;
+            const maxY = Math.max(...nodes.map(d => d.y)) + 200;
 
-            // Adjust the tree position dynamically
-            svg.attr("transform", `translate(100, ${adjustment})`);
+            const svgWidth = maxX - minX + margin.left + margin.right;
+            const svgHeight = maxY - minY + margin.top + margin.bottom;
 
-            // Adjust the SVG height dynamically
-            d3.select("svg").attr("height", newHeight);
+            d3.select("svg")
+                .attr("width", svgWidth)
+                .attr("height", svgHeight);
 
             const node = svg.selectAll('g.node')
                 .data(nodes, d => d.id || (d.id = ++i));
 
             const nodeEnter = node.enter().append('g')
                 .attr('class', 'node')
-                .attr('transform', d => `translate(${source.y0},${source.x0})`)
+                .attr('transform', d => `translate(${source.x0},${source.y0})`)
                 .on('click', click);
+                
 
             nodeEnter.append('rect')
-                .attr('width', 100)  // Width of the rectangle
-                .attr('height', 40)  // Height of the rectangle
-                .attr('x', -50)      // x-offset to center the rectangle horizontally
-                .attr('y', -20)      // y-offset to center the rectangle vertically
+                .attr('width', 100)
+                .attr('height', 30)
+                .attr('x', -50)
+                .attr('y', -15)
+                .attr('rx', 10)
+                .attr('ry', 10)
                 .attr('class', 'node')
                 .style('fill', d => d._children ? "lightsteelblue" : "#fff");
 
+
             nodeEnter.append('text')
-                .attr('dy', '0.35em')
+                .attr('dy', '.23em')
                 .attr('x', 0)
                 .attr('text-anchor', 'middle')
+                .attr("font-family", 'Noto Naskh Arabic, sans-serif')
+                .attr("font-size", "20px")
                 .text(d => d.data.name);
 
             nodeEnter.append('text')
-                .attr('dy', '-5')
-                .attr('x', 55)
+                .attr('dy', '.35em')
+                .attr('x', 50)
+                .attr('y', -15)
                 .attr('text-anchor', 'start')
-                .text(d => (d.children || d._children) ? (d.children ? d.children.length : d._children.length) : '');
+                .attr("font-family", 'Noto Naskh Arabic, sans-serif')
+                .attr("font-size", "10px")
+                .style('fill', 'red')
+                .text(d => d.children || d._children ? `(${d.children ? d.children.length : d._children.length})` : '');
 
             const nodeUpdate = nodeEnter.merge(node);
 
             nodeUpdate.transition()
-                .duration(200)
-                .attr('transform', d => `translate(${d.y},${d.x})`);
+                .duration(duration)
+                .attr('transform', d => `translate(${d.x},${d.y})`);
 
-            nodeUpdate.select('rect.node')
-                .attr('width', 100)  // Width of the rectangle
-                .attr('height', 40)  // Height of the rectangle
+            nodeUpdate.select('rect')
+                .attr('width', 100)
+                .attr('height', 30)
+                .attr('x', -50)
+                .attr('y', -15)
+                .attr('rx', 10)
+                .attr('ry', 10)
+                .attr('class', d => d._children ? 'has-children' : '')
                 .style('fill', d => d._children ? "lightsteelblue" : "#fff")
-                .attr('cursor', 'pointer');
+
 
             const nodeExit = node.exit().transition()
-                .duration(200)
-                .attr('transform', d => `translate(${source.y},${source.x})`)
+                .duration(duration)
+                .attr('transform', d => `translate(${source.x},${source.y})`)
                 .remove();
 
             nodeExit.select('rect')
-                .attr('width', 1e-6)
-                .attr('height', 1e-6);
-
-            nodeExit.select('text')
-                .style('fill-opacity', 1e-6);
+                .attr('width', 100)
+                .attr('height', 30)
+                .attr('x', -50)
+                .attr('y', -15)
+                .attr('rx', 10)
+                .attr('ry', 10);
 
             const link = svg.selectAll('path.link')
                 .data(links, d => d.id);
 
-            const linkEnter = link.enter().insert('path', "g")
+            const linkEnter = link.enter().insert('path', 'g')
                 .attr('class', 'link')
                 .attr('d', d => {
-                    const o = { x: source.x0, y: source.y0 };
-                    return elbow(o, o);
+                    const o = { x: source.x, y: source.y };
+                    return `M${o.x},${o.y}V${o.y + 25}H${d.x}V${d.y}`;
                 });
 
             const linkUpdate = linkEnter.merge(link);
 
             linkUpdate.transition()
-                .duration(200)
-                .attr('d', d => elbow(d, d.parent));
+                .duration(duration)
+                .attr('d', d => `M${d.parent.x},${d.parent.y}V${d.parent.y + 25}H${d.x}V${d.y}`);
 
             const linkExit = link.exit().transition()
-                .duration(200)
+                .duration(duration)
                 .attr('d', d => {
                     const o = { x: source.x, y: source.y };
-                    return elbow(o, o);
+                    return `M${o.x},${o.y}V${o.y + 25}H${d.x}V${d.y}`;
                 })
                 .remove();
 
@@ -589,46 +618,41 @@
                 d.y0 = d.y;
             });
 
-            function elbow(s, d) {
-                const offset = 50;  // Offset to ensure lines do not touch rectangles
-                const hy = (d.y + s.y) / 2;
-                return `M${s.y + offset},${s.x}H${hy}V${d.x}H${d.y - offset}`;
-            }
+            const offsetX = (svgWidth / 2) - root.x;
+            const offsetY = margin.top - root.y;
 
-            function click(event, d) {
-                if (d.children) {
-                    d._children = d.children;
-                    d.children = null;
-                } else {
-                    d.children = d._children;
-                    d._children = null;
-                }
-                update(d);
-            }
+            d3.select("g")
+                .transition()
+                .duration(duration)
+                .attr("transform", `translate(${offsetX},${offsetY})`);
         }
 
-        // Function to expand or collapse all nodes
+        function click(event, d) {
+            if (d.children) {
+                d._children = d.children;
+                d.children = null;
+            } else {
+                d.children = d._children;
+                d._children = null;
+            }
+            update(d);
+        }
+
         let expanded = false;
-        function toggleAll(d) {
+
+        function toggleTree() {
             if (expanded) {
                 collapse(root);
-                expanded = false;
             } else {
                 expand(root);
-                expanded = true;
             }
+            expanded = !expanded;
             update(root);
         }
 
-        // Add event listener to the button
-        document.getElementById('toggleButton').addEventListener('click', () => {
-            toggleAll(root);
-        });
+        document.getElementById('expand-collapse-btn').addEventListener('click', toggleTree);
 
-        // Collapse all nodes initially to show only the root
-        collapse(root);
         update(root);
     </script>
 </body>
-
 </html>
