@@ -10,7 +10,7 @@
         .node rect {
             fill: #fff;
             stroke: steelblue;
-            stroke-width: 1.5px;
+            stroke-width: 3px;
         }
         .node text {
             font-family: 'Noto Naskh Arabic', sans-serif;
@@ -19,7 +19,7 @@
         .link {
             fill: none;
             stroke: #040404;
-            stroke-width: 2px;
+            stroke-width: 3px;
         }
         .node:hover {
             cursor: pointer;
@@ -48,7 +48,7 @@
             left: 10px;
             padding: 5px 5px;
             background-color: lightgray;
-            border: 1px solid darkgray;
+            border: 2px solid darkgray;
             cursor: pointer;
         }
     </style>
@@ -446,7 +446,7 @@
         const margin = { top: 150, right: 20, bottom: 20, left: 300 };
         let width = 1200, height = 2000;
 
-        let i = 0, duration = 750;
+        let i = 0, duration = 200;
 
         const tree = d3.tree().nodeSize([120, 50]);
 
@@ -507,7 +507,7 @@
             const nodes = treeData.descendants();
             const links = treeData.descendants().slice(1);
 
-            nodes.forEach(d => d.y = d.depth * 50);
+            nodes.forEach(d => d.y = d.depth * 70);
 
             const minX = Math.min(...nodes.map(d => d.x)) - 200;
             const maxX = Math.max(...nodes.map(d => d.x)) + 200;
@@ -532,7 +532,7 @@
 
             nodeEnter.append('rect')
                 .attr('width', 100)
-                .attr('height', 30)
+                .attr('height', 40)
                 .attr('x', -50)
                 .attr('y', -15)
                 .attr('rx', 10)
@@ -596,7 +596,7 @@
                 .attr('class', 'link')
                 .attr('d', d => {
                     const o = { x: source.x, y: source.y };
-                    return `M${o.x},${o.y}V${o.y + 25}H${d.x}V${d.y}`;
+                    return `M${o.x},${o.y}V${o.y}H${d.x}V${d.y}`;
                 });
 
             const linkUpdate = linkEnter.merge(link);
@@ -609,7 +609,7 @@
                 .duration(duration)
                 .attr('d', d => {
                     const o = { x: source.x, y: source.y };
-                    return `M${o.x},${o.y}V${o.y + 25}H${d.x}V${d.y}`;
+                    return `M${o.x},${o.y}V${o.y}H${d.x}V${d.y}`;
                 })
                 .remove();
 
