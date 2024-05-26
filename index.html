@@ -18,7 +18,7 @@
         .link {
             fill: none;
             stroke: #040404;
-            stroke-width: 3px;
+            stroke-width: 2.5px;
         }
         .node:hover {
             cursor: pointer;
@@ -49,9 +49,38 @@
             border: 2px solid darkgray;
             cursor: pointer;
         }
+
+        #page-title {
+        position: fixed;
+        top: 10px;
+        left: 25%;
+        transform: translateX(-50%);
+        text-align: center;
+        font-family: 'Noto Naskh Arabic', sans-serif;
+        font-size: 30px; /* Adjust font size here */
+        }
+
+        #page-subtitle {
+        position: fixed;
+        top: 50px;
+        left: 25%;
+        transform: translateX(-50%);
+        text-align: center;
+        font-family: 'Noto Naskh Arabic', sans-serif;
+        font-size: 20px; /* Adjust font size here */
+        }
+
     </style>
 </head>
 <body>
+    <div id="page-title">
+        <div>شجرة عشيرة السياط</div>
+    </div>
+    <div id="page-subtitle">
+        <div>من ذرية سياط بن عودة بن محمد بن علّيج بن محمد بن سليمان</div>
+        <div>بن نافع بن عمار بن زقروط الربيعي العبدي الشمري</div>
+    </div>
+    
     <div id="expand-collapse-btn">اضغط لعرض كامل<br>الشجرة أو إغلاقها</div>
     <div id="tree-container">
         <svg></svg>
@@ -460,30 +489,6 @@
 
         collapse(root);
 
-        svg.append("text")
-            .attr("x", root.x) // Center horizontally
-            .attr("y", root.y0 - 110)
-            .attr("text-anchor", "middle")
-            .attr("font-family", 'Noto Naskh Arabic, sans-serif')
-            .attr("font-size", "30px")
-            .text("شجرة عشيرة السياط");
-
-        svg.append("text")
-            .attr("x", root.x) // Center horizontally
-            .attr("y", root.y0 - 80)
-            .attr("text-anchor", "middle")
-            .attr("font-family", 'Noto Naskh Arabic, sans-serif')
-            .attr("font-size", "20px")
-            .text("من ذرية سياط بن عودة بن محمد بن علّيج بن محمد بن سليمان");
-
-        svg.append("text")
-            .attr("x", root.x) // Center horizontally
-            .attr("y", root.y0 - 50)
-            .attr("text-anchor", "middle")
-            .attr("font-family", 'Noto Naskh Arabic, sans-serif')
-            .attr("font-size", "20px")
-            .text("بن نافع بن عمار بن زقروط الربيعي العبدي الشمري");
-
         function collapse(d) {
             if (d.children) {
                 d._children = d.children;
@@ -598,10 +603,9 @@
 
             linkUpdate.transition()
                 .duration(duration)
-                .attr('d', d => `M${d.parent.x},${d.parent.y}V${d.parent.y + 25}H${d.x}V${d.y}`);
+                .attr('d', d => `M${d.parent.x},${d.parent.y}V${d.parent.y + 35}H${d.x}V${d.y}`);
 
-            const linkExit = link.exit().transition()
-                .duration(duration)
+            const linkExit = link.exit()
                 .attr('d', d => {
                     const o = { x: source.x, y: source.y };
                     return `M${o.x},${o.y}V${o.y}H${d.x}V${d.y}`;
