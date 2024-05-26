@@ -14,7 +14,6 @@
         }
         .node text {
             font-family: 'Noto Naskh Arabic', sans-serif;
-
         }
         .link {
             fill: none;
@@ -27,7 +26,6 @@
         .node.has-children rect {
             fill: lightblue;
         }
-
         .node.collapsed rect {
             fill: blue;
         }
@@ -463,28 +461,28 @@
         collapse(root);
 
         svg.append("text")
-    .attr("x", root.x) // Center horizontally
-    .attr("y", root.y0-110)
-    .attr("text-anchor", "middle")
-    .attr("font-family", 'Noto Naskh Arabic, sans-serif')
-    .attr("font-size", "30px")
-    .text("شجرة عشيرة السياط");
+            .attr("x", root.x) // Center horizontally
+            .attr("y", root.y0 - 110)
+            .attr("text-anchor", "middle")
+            .attr("font-family", 'Noto Naskh Arabic, sans-serif')
+            .attr("font-size", "30px")
+            .text("شجرة عشيرة السياط");
 
-    svg.append("text")
-    .attr("x", root.x) // Center horizontally
-    .attr("y", root.y0-80)
-    .attr("text-anchor", "middle")
-    .attr("font-family", 'Noto Naskh Arabic, sans-serif')
-    .attr("font-size", "20px")
-    .text("من ذرية سياط بن عودة بن محمد بن علّيج بن محمد بن سليمان");
+        svg.append("text")
+            .attr("x", root.x) // Center horizontally
+            .attr("y", root.y0 - 80)
+            .attr("text-anchor", "middle")
+            .attr("font-family", 'Noto Naskh Arabic, sans-serif')
+            .attr("font-size", "20px")
+            .text("من ذرية سياط بن عودة بن محمد بن علّيج بن محمد بن سليمان");
 
-    svg.append("text")
-    .attr("x", root.x) // Center horizontally
-    .attr("y", root.y0-50)
-    .attr("text-anchor", "middle")
-    .attr("font-family", 'Noto Naskh Arabic, sans-serif')
-    .attr("font-size", "20px")
-    .text("بن نافع بن عمار بن زقروط الربيعي العبدي الشمري");
+        svg.append("text")
+            .attr("x", root.x) // Center horizontally
+            .attr("y", root.y0 - 50)
+            .attr("text-anchor", "middle")
+            .attr("font-family", 'Noto Naskh Arabic, sans-serif')
+            .attr("font-size", "20px")
+            .text("بن نافع بن عمار بن زقروط الربيعي العبدي الشمري");
 
         function collapse(d) {
             if (d.children) {
@@ -526,9 +524,8 @@
 
             const nodeEnter = node.enter().append('g')
                 .attr('class', 'node')
-                .attr('transform', d => `translate(${source.x0},${source.y0})`)
+                .attr('transform', d => d.depth === 0 ? `translate(${d.x},${d.y})` : `translate(${source.x0},${source.y0})`)
                 .on('click', click);
-                
 
             nodeEnter.append('rect')
                 .attr('width', 100)
@@ -539,7 +536,6 @@
                 .attr('ry', 10)
                 .attr('class', 'node')
                 .style('fill', d => d._children ? "lightsteelblue" : "#fff");
-
 
             nodeEnter.append('text')
                 .attr('dy', '.23em')
@@ -562,7 +558,7 @@
             const nodeUpdate = nodeEnter.merge(node);
 
             nodeUpdate.transition()
-                .duration(duration)
+                .duration(d => d.depth === 0 ? 0 : duration)
                 .attr('transform', d => `translate(${d.x},${d.y})`);
 
             nodeUpdate.select('rect')
@@ -573,8 +569,7 @@
                 .attr('rx', 10)
                 .attr('ry', 10)
                 .attr('class', d => d._children ? 'has-children' : '')
-                .style('fill', d => d._children ? "lightsteelblue" : "#fff")
-
+                .style('fill', d => d._children ? "lightsteelblue" : "#fff");
 
             const nodeExit = node.exit().transition()
                 .duration(duration)
@@ -622,8 +617,6 @@
             const offsetY = margin.top - root.y;
 
             d3.select("g")
-                .transition()
-                .duration(duration)
                 .attr("transform", `translate(${offsetX},${offsetY})`);
         }
 
@@ -652,6 +645,7 @@
 
         document.getElementById('expand-collapse-btn').addEventListener('click', toggleTree);
 
+        // Initial render to position elements correctly without transitions
         update(root);
     </script>
 </body>
