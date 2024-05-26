@@ -475,7 +475,10 @@
 
         let i = 0, duration = 200;
 
-        const tree = d3.tree().nodeSize([120, 50]);
+        const tree = d3.tree().nodeSize([120, 50])
+        .separation((a, b) => {
+                return a.parent === b.parent ? 1 : 1.15; // Control the distance between nodes with different parents
+            });
 
         const svg = d3.select("svg")
             .attr("width", width)
@@ -556,7 +559,7 @@
                 .attr('y', -15)
                 .attr('text-anchor', 'start')
                 .attr("font-family", 'Noto Naskh Arabic, sans-serif')
-                .attr("font-size", "10px")
+                .attr("font-size", "13px")
                 .style('fill', 'red')
                 .text(d => d.children || d._children ? `(${d.children ? d.children.length : d._children.length})` : '');
 
