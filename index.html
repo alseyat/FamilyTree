@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="Arabic">
 <head>
     <meta charset="UTF-8">
     <title>شجرة عشيرة السياط</title>
@@ -175,6 +175,17 @@ let root = d3.hierarchy(data);
 root.x0 = width / 2;
 root.y0 = 0;
 
+// Function to reverse children of each node
+function reverseChildren(node) {
+    if (node.children) {
+        node.children.reverse();
+        node.children.forEach(reverseChildren);
+    }
+}
+
+// Reverse children order for the root node
+reverseChildren(root);
+
 collapse(root);
 
 function collapse(d) {
@@ -192,6 +203,7 @@ function expand(d) {
         d._children = null;
     }
 }
+
 
 
 function update(source) {
