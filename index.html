@@ -155,228 +155,231 @@
         import data from './alseyat.js';
 
         const margin = { top: 200, right: 20, bottom: 20, left: 300 }; // Adjusted top margin to 200px for spacing below the button
-let width = 1200, height = 2000;
+        let width = 1200, height = 2000;
 
-let i = 0, duration = 200;
+        let i = 0, duration = 200;
 
+        const svg = d3.select("svg")
+            .attr("width", width)
+            .attr("height", height);
 
+        const svgGroup = svg.append("g")
+            .attr("transform", `translate(${margin.left},${margin.top})`); // Initial translation with increased top padding
 
-const svg = d3.select("svg")
-    .attr("width", width)
-    .attr("height", height);
+        const tree = d3.tree().nodeSize([120, 50])
+            .separation((a, b) => a.parent === b.parent ? 1 : 1.25);
+        
+        let root = d3.hierarchy(data);
+        root.x0 = width / 2;
+        root.y0 = 0;
 
-const svgGroup = svg.append("g")
-    .attr("transform", `translate(${margin.left},${margin.top})`); // Initial translation with increased top padding
+        // Function to reverse children of each node
+        function reverseChildren(node) {
+            if (node.children) {
+                node.children.reverse();
+                node.children.forEach(reverseChildren);
+            }
+        }
 
-    const tree = d3.tree().nodeSize([120, 50])
-    .separation((a, b) => a.parent === b.parent ? 1 : 1.25);
-    
-let root = d3.hierarchy(data);
-root.x0 = width / 2;
-root.y0 = 0;
+        // Reverse children order for the root node
+        reverseChildren(root);
 
-// Function to reverse children of each node
-function reverseChildren(node) {
-    if (node.children) {
-        node.children.reverse();
-        node.children.forEach(reverseChildren);
-    }
-}
+        collapse(root);
 
-// Reverse children order for the root node
-reverseChildren(root);
+        function collapse(d) {
+            if (d.children) {
+                d._children = d.children;
+                d._children.forEach(collapse);
+                d.children = null;
+            }
+        }
 
-collapse(root);
+        function expand(d) {
+            if (d._children) {
+                d.children = d._children;
+                d.children.forEach(expand);
+                d._children = null;
+            }
+        }
 
-function collapse(d) {
-    if (d.children) {
-        d._children = d.children;
-        d._children.forEach(collapse);
-        d.children = null;
-    }
-}
+        function update(source) {
+            const treeData = tree(root);
+            const nodes = treeData.descendants();
+            const links = treeData.descendants().slice(1);
 
-function expand(d) {
-    if (d._children) {
-        d.children = d._children;
-        d.children.forEach(expand);
-        d._children = null;
-    }
-}
+            nodes.forEach(d => d.y = d.depth * 70);
 
+            // Calculate the minimum x-coordinate to adjust the tree position
+            const minX = Math.min(...nodes.map(d => d.x));
+            const adjustment = Math.max(0, 100 - minX); // Ensure minimum padding of 200
 
+            // Calculate the maximum x-coordinate to adjust the SVG height
+            const maxX = Math.max(...nodes.map(d => d.x));
+            const newHeight = maxX + 200; // Add padding of 200
 
-function update(source) {
-    const treeData = tree(root);
-    const nodes = treeData.descendants();
-    const links = treeData.descendants().slice(1);
+            // Adjust the tree position dynamically
+            svgGroup.attr("transform", `translate(${adjustment} , 230)`);
+            // Adjust the SVG height dynamically
+            d3.select("svg").attr("height", newHeight);
 
-    nodes.forEach(d => d.y = d.depth * 70);
+            const node = svgGroup.selectAll('g.node')
+                .data(nodes, d => d.id || (d.id = ++i));
 
-    // Calculate the minimum x-coordinate to adjust the tree position
-    const minX = Math.min(...nodes.map(d => d.x));
-    const adjustment = Math.max(0, 100 - minX); // Ensure minimum padding of 200
+            const nodeEnter = node.enter().append('g')
+                .attr('class', 'node')
+                .attr('transform', d => `translate(${source.x0},${source.y0})`)
+                .on('click', click);
 
-    // Calculate the maximum x-coordinate to adjust the SVG height
-    const maxX = Math.max(...nodes.map(d => d.x));
-    const newHeight = maxX + 200; // Add padding of 200
+            nodeEnter.append('rect')
+                .attr('width', 100)
+                .attr('height', 40)
+                .attr('x', -50)
+                .attr('y', -15)
+                .attr('rx', 10)
+                .attr('ry', 10)
+                .attr('class', 'node')
+                .style('fill', d => d._children ? "lightsteelblue" : "#fff");
 
-    // Adjust the tree position dynamically
-    svgGroup.attr("transform", `translate(${adjustment} , 230)`);
-    // Adjust the SVG height dynamically
-    d3.select("svg").attr("height", newHeight);
+            nodeEnter.append('text')
+                .attr('dy', '.23em')
+                .attr('x', 0)
+                .attr('text-anchor', 'middle')
+                .attr("font-family", 'Noto Naskh Arabic, sans-serif')
+                .attr("font-size", "20px")
+                .text(d => d.data.name);
 
-    const node = svgGroup.selectAll('g.node')
-        .data(nodes, d => d.id || (d.id = ++i));
+            nodeEnter.append('text')
+                .attr('dy', '.35em')
+                .attr('x', 50)
+                .attr('y', -15)
+                .attr('text-anchor', 'start')
+                .attr("font-family", 'Noto Naskh Arabic, sans-serif')
+                .attr("font-size", "13px")
+                .style('fill', 'red')
+                .text(d => d.children || d._children ? `(${d.children ? d.children.length : d._children.length})` : '');
 
-    const nodeEnter = node.enter().append('g')
-        .attr('class', 'node')
-        .attr('transform', d => `translate(${source.x0},${source.y0})`)
-        .on('click', click);
+            const nodeUpdate = nodeEnter.merge(node);
 
-    nodeEnter.append('rect')
-        .attr('width', 100)
-        .attr('height', 40)
-        .attr('x', -50)
-        .attr('y', -15)
-        .attr('rx', 10)
-        .attr('ry', 10)
-        .attr('class', 'node')
-        .style('fill', d => d._children ? "lightsteelblue" : "#fff");
+            nodeUpdate.transition()
+                .duration(d => d.depth === 0 ? 0 : duration)
+                .attr('transform', d => `translate(${d.x},${d.y})`);
 
-    nodeEnter.append('text')
-        .attr('dy', '.23em')
-        .attr('x', 0)
-        .attr('text-anchor', 'middle')
-        .attr("font-family", 'Noto Naskh Arabic, sans-serif')
-        .attr("font-size", "20px")
-        .text(d => d.data.name);
+            nodeUpdate.select('rect')
+                .attr('width', 100)
+                .attr('height', 30)
+                .attr('x', -50)
+                .attr('y', -15)
+                .attr('rx', 10)
+                .attr('ry', 10)
+                .attr('class', d => d._children ? 'has-children' : '')
+                .style('fill', d => d._children ? "lightsteelblue" : "#fff");
 
-    nodeEnter.append('text')
-        .attr('dy', '.35em')
-        .attr('x', 50)
-        .attr('y', -15)
-        .attr('text-anchor', 'start')
-        .attr("font-family", 'Noto Naskh Arabic, sans-serif')
-        .attr("font-size", "13px")
-        .style('fill', 'red')
-        .text(d => d.children || d._children ? `(${d.children ? d.children.length : d._children.length})` : '');
+            const nodeExit = node.exit().transition()
+                .duration(duration)
+                .attr('transform', d => `translate(${source.x},${source.y})`)
+                .remove();
 
-    const nodeUpdate = nodeEnter.merge(node);
+            nodeExit.select('rect')
+                .attr('width', 100)
+                .attr('height', 30)
+                .attr('x', -50)
+                .attr('y', -15)
+                .attr('rx', 10)
+                .attr('ry', 10);
 
-    nodeUpdate.transition()
-        .duration(d => d.depth === 0 ? 0 : duration)
-        .attr('transform', d => `translate(${d.x},${d.y})`);
+            const link = svgGroup.selectAll('path.link')
+                .data(links, d => d.id);
 
-    nodeUpdate.select('rect')
-        .attr('width', 100)
-        .attr('height', 30)
-        .attr('x', -50)
-        .attr('y', -15)
-        .attr('rx', 10)
-        .attr('ry', 10)
-        .attr('class', d => d._children ? 'has-children' : '')
-        .style('fill', d => d._children ? "lightsteelblue" : "#fff");
+            const linkEnter = link.enter().insert('path', 'g')
+                .attr('class', 'link')
+                .attr('d', d => {
+                    const o = { x: source.x, y: source.y };
+                    return `M${o.x},${o.y}V${o.y}H${d.x}V${d.y}`;
+                });
 
-    const nodeExit = node.exit().transition()
-        .duration(duration)
-        .attr('transform', d => `translate(${source.x},${source.y})`)
-        .remove();
+            const linkUpdate = linkEnter.merge(link);
 
-    nodeExit.select('rect')
-        .attr('width', 100)
-        .attr('height', 30)
-        .attr('x', -50)
-        .attr('y', -15)
-        .attr('rx', 10)
-        .attr('ry', 10);
+            linkUpdate.transition()
+                .duration(duration)
+                .attr('d', d => `M${d.parent.x},${d.parent.y}V${d.parent.y + 35}H${d.x}V${d.y}`);
 
-    const link = svgGroup.selectAll('path.link')
-        .data(links, d => d.id);
+            const linkExit = link.exit()
+                .attr('d', d => {
+                    const o = { x: source.x, y: source.y };
+                    return `M${o.x},${o.y}V${o.y}H${d.x}V${d.y}`;
+                })
+                .remove();
 
-    const linkEnter = link.enter().insert('path', 'g')
-        .attr('class', 'link')
-        .attr('d', d => {
-            const o = { x: source.x, y: source.y };
-            return `M${o.x},${o.y}V${o.y}H${d.x}V${d.y}`;
-        });
-
-    const linkUpdate = linkEnter.merge(link);
-
-    linkUpdate.transition()
-        .duration(duration)
-        .attr('d', d => `M${d.parent.x},${d.parent.y}V${d.parent.y + 35}H${d.x}V${d.y}`);
-
-    const linkExit = link.exit()
-        .attr('d', d => {
-            const o = { x: source.x, y: source.y };
-            return `M${o.x},${o.y}V${o.y}H${d.x}V${d.y}`;
-        })
-        .remove();
-
-    nodes.forEach(d => {
-        d.x0 = d.x;
-        d.y0 = d.y;
-    });
-
-
-}
-
-
-function click(event, d) {
-    if (d.children) {
-        // Collapse all descendants
-        d._children = d.children.concat(d._children || []);
-        d.children = null;
-    } else {
-        // Ensure only immediate children are shown
-        if (d._children) {
-            d.children = d._children;
-            d._children = null;
-            // Collapse the grandchildren (if any) of the now-visible children
-            d.children.forEach(child => {
-                if (child.children) {
-                    child._children = child.children;
-                    child.children = null;
-                }
+            nodes.forEach(d => {
+                d.x0 = d.x;
+                d.y0 = d.y;
             });
         }
-    }
-    update(d);
-}
 
+        function click(event, d) {
+            if (d.children) {
+                d._children = d.children.concat(d._children || []);
+                d.children = null;
+            } else {
+                if (d._children) {
+                    d.children = d._children;
+                    d._children = null;
+                    d.children.forEach(child => {
+                        if (child.children) {
+                            child._children = child.children;
+                            child.children = null;
+                        }
+                    });
+                }
+            }
+            update(d);
+        }
 
         let expanded = true;
 
-function toggleTree() {
-    // Check if the root node has children
-    if (root.children) {
-        collapseAll(root);
-    } else {
-        expandAll(root);
-    }
-    update(root);
-}
+        function toggleTree() {
+            if (root.children) {
+                collapseAll(root);
+            } else {
+                expandAll(root);
+            }
+            update(root);
+            centerTopNode();
+        }
 
-function collapseAll(d) {
-    if (d.children) {
-        d.children.forEach(collapseAll);
-        d._children = d.children;
-        d.children = null;
-    }
-}
+        function collapseAll(d) {
+            if (d.children) {
+                d.children.forEach(collapseAll);
+                d._children = d.children;
+                d.children = null;
+            }
+        }
 
-function expandAll(d) {
-    if (d._children) {
-        d.children = d._children;
-        d.children.forEach(expandAll);
-        d._children = null;
-    }
-}
+        function expandAll(d) {
+            if (d._children) {
+                d.children = d._children;
+                d.children.forEach(expandAll);
+                d._children = null;
+            }
+        }
+
+        function centerTopNode() {
+            const topNode = d3.select('.node').node();
+            const treeContainer = document.getElementById('tree-container');
+            if (topNode && treeContainer) {
+                const topNodeBox = topNode.getBoundingClientRect();
+                const containerBox = treeContainer.getBoundingClientRect();
+                const scrollLeft = topNodeBox.left - containerBox.left + (topNodeBox.width / 2) - (containerBox.width / 2);
+                const scrollTop = topNodeBox.top - containerBox.top + (topNodeBox.height / 2) - (containerBox.height / 2);
+                treeContainer.scrollLeft = scrollLeft;
+                treeContainer.scrollTop = scrollTop;
+            }
+        }
 
         document.getElementById('expand-collapse-btn').addEventListener('click', toggleTree);
 
         update(root);
+        centerTopNode();
     </script>
 </body>
 </html>
