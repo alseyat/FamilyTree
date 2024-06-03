@@ -169,7 +169,7 @@ const svgGroup = svg.append("g")
     .attr("transform", `translate(${margin.left},${margin.top})`); // Initial translation with increased top padding
 
     const tree = d3.tree().nodeSize([120, 50])
-    .separation((a, b) => a.parent === b.parent ? 1 : 1.15);
+    .separation((a, b) => a.parent === b.parent ? 1 : 1.25);
     
 let root = d3.hierarchy(data);
 root.x0 = width / 2;
