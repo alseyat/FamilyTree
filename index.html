@@ -47,23 +47,6 @@
             background-color: rgb(134, 131, 131);
         }
 
-        #expand-collapse-btn {
-            position: absolute;
-            top: 150px;
-            left: 50%;
-            transform: translateX(-50%);
-            padding: 5px 5px;
-            background-color: rgb(223, 221, 221);
-            border: 2px solid darkgray;
-            cursor: pointer;
-            text-align: center; /* Center the text horizontally */
-            line-height: 1; /* Adjust line height to center the text vertically */
-            width: 230px; /* Adjust width for desktop view */
-            height: 15px; /* Adjust height for desktop view */
-            border-radius: 10px; /* Rounded corners */
-
-        }
-
         #page-title {
             position: absolute;
             top: 10px;
@@ -88,6 +71,36 @@
             white-space: nowrap; /* Prevent text from wrapping */
             overflow: hidden; /* Hide overflow */
             text-overflow: ellipsis; /* Add ellipsis to indicate overflow */
+        }
+
+        #page-subsubtitle {
+            position: absolute;
+            top: 145px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            font-family: 'Noto Naskh Arabic', sans-serif;
+            font-size: 15px; /* Adjust font size here */
+            white-space: nowrap; /* Prevent text from wrapping */
+            overflow: hidden; /* Hide overflow */
+            text-overflow: ellipsis; /* Add ellipsis to indicate overflow */
+        }
+
+        #expand-collapse-btn {
+            position: absolute;
+            top: 180px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 5px 5px;
+            background-color: rgb(223, 221, 221);
+            border: 2px solid darkgray;
+            cursor: pointer;
+            text-align: center; /* Center the text horizontally */
+            line-height: 1; /* Adjust line height to center the text vertically */
+            width: 230px; /* Adjust width for desktop view */
+            height: 15px; /* Adjust height for desktop view */
+            border-radius: 10px; /* Rounded corners */
+
         }
 
         @media (max-width: 600px) {
@@ -118,10 +131,22 @@
                 text-overflow: ellipsis; /* Add ellipsis to indicate overflow */
             }
 
+            #page-subsubtitle {
+                font-size: 12px !important; /* Smaller font size for mobile */
+                top: 90px !important; /* Adjust top position for mobile */
+                left: 50% !important; /* Center align for mobile */
+                transform: translateX(-50%) !important; /* Keep centered for mobile */
+                width: 90% !important; /* Ensure it fits in mobile view */
+                margin: 0 auto !important; /* Center horizontally */
+                white-space: nowrap; /* Prevent text from wrapping */
+                overflow: hidden; /* Hide overflow */
+                text-overflow: ellipsis; /* Add ellipsis to indicate overflow */
+            }
+
             #expand-collapse-btn {
                 font-size: 13px !important; /* Smaller font size for mobile */
                 padding: 3px 3px !important; /* Smaller padding for mobile */
-                top: 90px !important; /* Adjust top position for mobile */
+                top: 120px !important; /* Adjust top position for mobile */
                 left: 50% !important; /* Adjust left position for mobile */
                 transform: translateX(-50%) !important; /* Keep centered for mobile */
                 position: absolute;
@@ -144,6 +169,9 @@
     <div id="page-subtitle">
         <div>من ذرية سياط بن عودة بن محمد بن علّيج بن محمد بن سليمان (جد الحجلا)</div>
         <div>بن نافع بن عمار بن زقروط الربيعي العبدي الشمري</div>
+    </div>
+    <div id="page-subsubtitle">
+        <div><span style="color: rgb(135, 11, 11);font-weight: bold;">إعداد:</span> <span style="color: rgb(7, 66, 147);font-weight: bold;">أنس بن سعود السياط</span></div>
     </div>
     
     <div id="expand-collapse-btn">اضغط هنا لعرض كامل الشجرة أو إغلاقها</div>
