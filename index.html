@@ -315,7 +315,7 @@
             }
         }
 
-        function update(source, center = false) {
+        function update(source, center = true) {
             const treeData = tree(root);
             const nodes = treeData.descendants();
             const links = treeData.descendants().slice(1);
