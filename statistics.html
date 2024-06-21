@@ -100,7 +100,7 @@
         <h2>أكثر الأسماء تكراراً</h2>
         <ul id="top-names" class="top-names"></ul>
 
-        <h2>ًأكثر الأفراد أبناء</h2>
+       <!-- <h2>ًأكثر الأفراد أبناء</h2> -->
         <ul id="top-children" class="top-children"></ul>
     </div>
 
@@ -174,18 +174,18 @@
                 topNamesList.appendChild(li);
             });
 
-            const topChildrenList = document.getElementById('top-children');
-            topChildren.forEach(({ names, children }) => {
-                const li = document.createElement('li');
-                li.innerHTML = `<div class="count">عدد الأبناء: ${children}</div>`;
-                names.forEach(name => {
-                    const nameDiv = document.createElement('div');
-                    nameDiv.className = 'name';
-                    nameDiv.innerText = `- ${name}.`;
-                    li.appendChild(nameDiv);
-                });
-                topChildrenList.appendChild(li);
-            });
+      //      const topChildrenList = document.getElementById('top-children');
+        //    topChildren.forEach(({ names, children }) => {
+          //      const li = document.createElement('li');
+            //    li.innerHTML = `<div class="count">عدد الأبناء: ${children}</div>`;
+              //  names.forEach(name => {
+                //    const nameDiv = document.createElement('div');
+                  //  nameDiv.className = 'name';
+               //     nameDiv.innerText = `- ${name}.`;
+                 //   li.appendChild(nameDiv);
+              //  });
+              //  topChildrenList.appendChild(li);
+         //   });
         }
 
         const statistics = prepareStatistics(data);
