@@ -145,10 +145,12 @@ const data = {
                                                                                     name: "يوسف",
                                                                                     children: [
                                                                                         { name: "محمد" },
-                                                                                        { name: "إبراهيم"
-                                                                                    children: [
-                                                                                        { name: "عجاج" }
-                                                                                    ] }
+                                                                                        {
+                                                                                            name: "إبراهيم",
+                                                                                            children: [
+                                                                                                { name: "عجاج" }
+                                                                                            ]
+                                                                                        }
                                                                                     ]
                                                                                 },
                                                                                 {
