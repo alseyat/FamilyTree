@@ -482,7 +482,10 @@ const data = {
                                                                                 {
                                                                                     name: "عبدالرحمن",
                                                                                     children: [
-                                                                                        { name: "مشاري" },
+                                                                                        { name: "مشاري",
+                                                                                            children: [
+                                                                                                { name: "عبدالعزيز" }
+                                                                                            ] },
                                                                                         { name: "عبدالعزيز" },
                                                                                         { name: "سعود" },
                                                                                         { name: "حمود" },
