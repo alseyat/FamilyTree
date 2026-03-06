@@ -432,8 +432,7 @@ const data = {
                                                                                         {
                                                                                             name: "محمد",
                                                                                             children: [
-                                                                                                { name: "عبدالله" },
-                                                                                                { name: "بندر" }
+                                                                                                { name: "عبدالله" }
                                                                                             ]
                                                                                         },
                                                                                         { name: "خالد" }
@@ -474,8 +473,7 @@ const data = {
                                                                                         {
                                                                                             name: "تركي",
                                                                                             children: [
-                                                                                                { name: "نايف" },
-                                                                                                { name: "فهد" }
+                                                                                                { name: "نايف" }
                                                                                             ]
                                                                                         },
                                                                                         { name: "سلطان" }
