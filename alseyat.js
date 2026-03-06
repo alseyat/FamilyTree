@@ -411,12 +411,17 @@ const data = {
                                                                                     ]
                                                                                 },
                                                                                 {
-                                                                                    name: "يوسف",
-                                                                                    children: [
-                                                                                        { name: "مهند" },
-                                                                                        { name: "هلال" }
-                                                                                    ]
-                                                                                },
+    name: "يوسف",
+    children: [
+        { 
+            name: "مهند",
+            children: [
+                { name: "يوسف" }
+            ]
+        },
+        { name: "هلال" }
+    ]
+},
                                                                                 {
                                                                                     name: "موسى",
                                                                                     children: [
