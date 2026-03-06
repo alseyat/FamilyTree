@@ -474,7 +474,8 @@ const data = {
                                                                                         {
                                                                                             name: "تركي",
                                                                                             children: [
-                                                                                                { name: "نايف" }
+                                                                                                { name: "نايف" }،
+                                                                                                { name: "فهد" }
                                                                                             ]
                                                                                         },
                                                                                         { name: "سلطان" }
