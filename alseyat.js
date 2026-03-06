@@ -432,7 +432,8 @@ const data = {
                                                                                         {
                                                                                             name: "محمد",
                                                                                             children: [
-                                                                                                { name: "عبدالله" }
+                                                                                                { name: "عبدالله" },
+                                                                                                { name: "بندر" }
                                                                                             ]
                                                                                         },
                                                                                         { name: "خالد" }
