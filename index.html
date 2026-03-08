@@ -4,10 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <title>شجرة أسرة السياط</title>
-    <link rel="icon" href="https://raw.githubusercontent.com/alseyat/FamilyTree/main/favicon_io/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="https://raw.githubusercontent.com/alseyat/FamilyTree/main/favicon_io/favicon.ico"
+        type="image/x-icon">
 
     <!-- For .png format -->
-    <link rel="icon" href="https://raw.githubusercontent.com/alseyat/FamilyTree/main/favicon_io/favicon-32x32.png" type="image/png">
+    <link rel="icon" href="https://raw.githubusercontent.com/alseyat/FamilyTree/main/favicon_io/favicon-32x32.png"
+        type="image/png">
 
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,19 +20,21 @@
 
         body {
             font-family: 'Noto Naskh Arabic', sans-serif;
-            direction: rtl; 
-            background-color: #f4efdf; /* Warm parchment base */
+            direction: rtl;
+            background-color: #f4efdf;
+            /* Warm parchment base */
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
         }
 
-.node {
-    filter: drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.3));
-    transition: filter 0.2s ease;
-}
+        .node {
+            filter: drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.3));
+            transition: filter 0.2s ease;
+        }
 
-.node:hover {
-    filter: drop-shadow(4px 6px 10px rgba(0, 0, 0, 0.7));
-}
+        .node:hover {
+            filter: drop-shadow(4px 6px 10px rgba(0, 0, 0, 0.7));
+        }
+
         .node rect {
             fill: #ffffff;
             stroke: #2c3e50;
@@ -55,8 +59,9 @@
 
         .link {
             fill: none;
-    stroke: #747a7a; /* A soft, elegant slate gray */
-    stroke-width: 2.5px;
+            stroke: #747a7a;
+            /* A soft, elegant slate gray */
+            stroke-width: 2.5px;
         }
 
         .node:hover {
@@ -72,7 +77,8 @@
         }
 
         #tree-container {
-            direction: ltr; /* <--- This single line fixes the disappearing node */
+            direction: ltr;
+            /* <--- This single line fixes the disappearing node */
             overflow-x: auto;
             overflow-y: auto;
             width: 100%;
@@ -83,26 +89,39 @@
             width: 50000px;
             height: 10000px;
         }
-#expand-collapse-btn {
-            background: rgba(255, 255, 255, 0.35); /* Semi-transparent white */
-            backdrop-filter: blur(8px); /* Frosted glass blur effect */
-            -webkit-backdrop-filter: blur(8px); /* For Safari support */
-            border: 1px solid rgba(139, 115, 85, 0.4); /* Soft, warm vintage brown border */
-            color: #4a3b32; /* Deep warm brown text to match the parchment vibe */
+
+        #expand-collapse-btn {
+            background: rgba(255, 255, 255, 0.35);
+            /* Semi-transparent white */
+            backdrop-filter: blur(8px);
+            /* Frosted glass blur effect */
+            -webkit-backdrop-filter: blur(8px);
+            /* For Safari support */
+            border: 1px solid rgba(139, 115, 85, 0.4);
+            /* Soft, warm vintage brown border */
+            color: #4a3b32;
+            /* Deep warm brown text to match the parchment vibe */
             font-family: 'Noto Naskh Arabic', sans-serif;
             font-size: 14px;
             font-weight: bold;
             padding: 10px 16px;
-            border-radius: 8px; /* Smooth, modern rounded corners */
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05); /* Very soft shadow */
-            transition: all 0.3s ease; /* Smooth transition for hovering */
+            border-radius: 8px;
+            /* Smooth, modern rounded corners */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            /* Very soft shadow */
+            transition: all 0.3s ease;
+            /* Smooth transition for hovering */
             cursor: pointer;
             outline: none;
         }
+
         #expand-collapse-btn:hover {
-            background: rgba(255, 255, 255, 0.65); /* Becomes slightly more solid on hover */
-            box-shadow: 0 6px 12px rgba(139, 115, 85, 0.15); /* Warmer, slightly larger shadow */
-            transform: translateY(-1px); /* Slight lift effect */
+            background: rgba(255, 255, 255, 0.65);
+            /* Becomes slightly more solid on hover */
+            box-shadow: 0 6px 12px rgba(139, 115, 85, 0.15);
+            /* Warmer, slightly larger shadow */
+            transform: translateY(-1px);
+            /* Slight lift effect */
         }
 
         #page-title {
@@ -144,7 +163,7 @@
             text-overflow: ellipsis;
         }
 
-        
+
         #button-container {
             display: flex;
             justify-content: center;
@@ -157,52 +176,76 @@
         }
 
         .zoom-btn {
-            background: rgba(255, 255, 255, 0.35); /* Semi-transparent white */
-            backdrop-filter: blur(8px); /* Frosted glass blur effect */
-            -webkit-backdrop-filter: blur(8px); /* For Safari support */
-            border: 1px solid rgba(139, 115, 85, 0.4); /* Soft, warm vintage brown border */
-            color: #4a3b32; /* Deep warm brown text to match the parchment vibe */
+            background: rgba(255, 255, 255, 0.35);
+            /* Semi-transparent white */
+            backdrop-filter: blur(8px);
+            /* Frosted glass blur effect */
+            -webkit-backdrop-filter: blur(8px);
+            /* For Safari support */
+            border: 1px solid rgba(139, 115, 85, 0.4);
+            /* Soft, warm vintage brown border */
+            color: #4a3b32;
+            /* Deep warm brown text to match the parchment vibe */
             font-family: 'Noto Naskh Arabic', sans-serif;
             font-size: 14px;
             font-weight: bold;
             padding: 10px 16px;
-            border-radius: 8px; /* Smooth, modern rounded corners */
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05); /* Very soft shadow */
-            transition: all 0.3s ease; /* Smooth transition for hovering */
+            border-radius: 8px;
+            /* Smooth, modern rounded corners */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            /* Very soft shadow */
+            transition: all 0.3s ease;
+            /* Smooth transition for hovering */
             cursor: pointer;
             outline: none;
         }
 
         #expand-collapse-btn {
-            background: rgba(255, 255, 255, 0.35); /* Semi-transparent white */
-            backdrop-filter: blur(8px); /* Frosted glass blur effect */
-            -webkit-backdrop-filter: blur(8px); /* For Safari support */
-            border: 1px solid rgba(139, 115, 85, 0.4); /* Soft, warm vintage brown border */
-            color: #4a3b32; /* Deep warm brown text to match the parchment vibe */
+            background: rgba(255, 255, 255, 0.35);
+            /* Semi-transparent white */
+            backdrop-filter: blur(8px);
+            /* Frosted glass blur effect */
+            -webkit-backdrop-filter: blur(8px);
+            /* For Safari support */
+            border: 1px solid rgba(139, 115, 85, 0.4);
+            /* Soft, warm vintage brown border */
+            color: #4a3b32;
+            /* Deep warm brown text to match the parchment vibe */
             font-family: 'Noto Naskh Arabic', sans-serif;
             font-size: 14px;
             font-weight: bold;
             padding: 10px 16px;
-            border-radius: 8px; /* Smooth, modern rounded corners */
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05); /* Very soft shadow */
-            transition: all 0.3s ease; /* Smooth transition for hovering */
+            border-radius: 8px;
+            /* Smooth, modern rounded corners */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            /* Very soft shadow */
+            transition: all 0.3s ease;
+            /* Smooth transition for hovering */
             cursor: pointer;
             outline: none;
         }
 
         #zoom-in-btn {
-            background: rgba(255, 255, 255, 0.35); /* Semi-transparent white */
-            backdrop-filter: blur(8px); /* Frosted glass blur effect */
-            -webkit-backdrop-filter: blur(8px); /* For Safari support */
-            border: 1px solid rgba(139, 115, 85, 0.4); /* Soft, warm vintage brown border */
-            color: #4a3b32; /* Deep warm brown text to match the parchment vibe */
+            background: rgba(255, 255, 255, 0.35);
+            /* Semi-transparent white */
+            backdrop-filter: blur(8px);
+            /* Frosted glass blur effect */
+            -webkit-backdrop-filter: blur(8px);
+            /* For Safari support */
+            border: 1px solid rgba(139, 115, 85, 0.4);
+            /* Soft, warm vintage brown border */
+            color: #4a3b32;
+            /* Deep warm brown text to match the parchment vibe */
             font-family: 'Noto Naskh Arabic', sans-serif;
             font-size: 14px;
             font-weight: bold;
             padding: 10px 16px;
-            border-radius: 8px; /* Smooth, modern rounded corners */
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05); /* Very soft shadow */
-            transition: all 0.3s ease; /* Smooth transition for hovering */
+            border-radius: 8px;
+            /* Smooth, modern rounded corners */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            /* Very soft shadow */
+            transition: all 0.3s ease;
+            /* Smooth transition for hovering */
             cursor: pointer;
             outline: none;
             top: 180px;
@@ -210,23 +253,35 @@
         }
 
         #zoom-in-btn:hover {
-background: rgba(255, 255, 255, 0.65); /* Becomes slightly more solid on hover */
-            box-shadow: 0 6px 12px rgba(139, 115, 85, 0.15); /* Warmer, slightly larger shadow */
-            transform: translateY(-1px); /* Slight lift effect */        }
+            background: rgba(255, 255, 255, 0.65);
+            /* Becomes slightly more solid on hover */
+            box-shadow: 0 6px 12px rgba(139, 115, 85, 0.15);
+            /* Warmer, slightly larger shadow */
+            transform: translateY(-1px);
+            /* Slight lift effect */
+        }
 
         #zoom-out-btn {
-             background: rgba(255, 255, 255, 0.35); /* Semi-transparent white */
-            backdrop-filter: blur(8px); /* Frosted glass blur effect */
-            -webkit-backdrop-filter: blur(8px); /* For Safari support */
-            border: 1px solid rgba(139, 115, 85, 0.4); /* Soft, warm vintage brown border */
-            color: #4a3b32; /* Deep warm brown text to match the parchment vibe */
+            background: rgba(255, 255, 255, 0.35);
+            /* Semi-transparent white */
+            backdrop-filter: blur(8px);
+            /* Frosted glass blur effect */
+            -webkit-backdrop-filter: blur(8px);
+            /* For Safari support */
+            border: 1px solid rgba(139, 115, 85, 0.4);
+            /* Soft, warm vintage brown border */
+            color: #4a3b32;
+            /* Deep warm brown text to match the parchment vibe */
             font-family: 'Noto Naskh Arabic', sans-serif;
             font-size: 14px;
             font-weight: bold;
             padding: 10px 16px;
-            border-radius: 8px; /* Smooth, modern rounded corners */
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05); /* Very soft shadow */
-            transition: all 0.3s ease; /* Smooth transition for hovering */
+            border-radius: 8px;
+            /* Smooth, modern rounded corners */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            /* Very soft shadow */
+            transition: all 0.3s ease;
+            /* Smooth transition for hovering */
             cursor: pointer;
             outline: none;
             top: 180px;
@@ -234,23 +289,35 @@ background: rgba(255, 255, 255, 0.65); /* Becomes slightly more solid on hover *
         }
 
         #zoom-out-btn:hover {
-background: rgba(255, 255, 255, 0.65); /* Becomes slightly more solid on hover */
-            box-shadow: 0 6px 12px rgba(139, 115, 85, 0.15); /* Warmer, slightly larger shadow */
-            transform: translateY(-1px); /* Slight lift effect */        }
+            background: rgba(255, 255, 255, 0.65);
+            /* Becomes slightly more solid on hover */
+            box-shadow: 0 6px 12px rgba(139, 115, 85, 0.15);
+            /* Warmer, slightly larger shadow */
+            transform: translateY(-1px);
+            /* Slight lift effect */
+        }
 
         #view-stats-btn {
-            background: rgba(255, 255, 255, 0.35); /* Semi-transparent white */
-            backdrop-filter: blur(8px); /* Frosted glass blur effect */
-            -webkit-backdrop-filter: blur(8px); /* For Safari support */
-            border: 1px solid rgba(139, 115, 85, 0.4); /* Soft, warm vintage brown border */
-            color: #4a3b32; /* Deep warm brown text to match the parchment vibe */
+            background: rgba(255, 255, 255, 0.35);
+            /* Semi-transparent white */
+            backdrop-filter: blur(8px);
+            /* Frosted glass blur effect */
+            -webkit-backdrop-filter: blur(8px);
+            /* For Safari support */
+            border: 1px solid rgba(139, 115, 85, 0.4);
+            /* Soft, warm vintage brown border */
+            color: #4a3b32;
+            /* Deep warm brown text to match the parchment vibe */
             font-family: 'Noto Naskh Arabic', sans-serif;
             font-size: 14px;
             font-weight: bold;
             padding: 10px 16px;
-            border-radius: 8px; /* Smooth, modern rounded corners */
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05); /* Very soft shadow */
-            transition: all 0.3s ease; /* Smooth transition for hovering */
+            border-radius: 8px;
+            /* Smooth, modern rounded corners */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            /* Very soft shadow */
+            transition: all 0.3s ease;
+            /* Smooth transition for hovering */
             cursor: pointer;
             outline: none;
             position: absolute !important;
@@ -258,13 +325,16 @@ background: rgba(255, 255, 255, 0.65); /* Becomes slightly more solid on hover *
             left: 50% !important;
             transform: translateX(-50%) !important;
             z-index: 10;
-            
+
         }
 
         #view-stats-btn:hover {
-            background: rgba(255, 255, 255, 0.65); /* Becomes slightly more solid on hover */
-            box-shadow: 0 6px 12px rgba(139, 115, 85, 0.15); /* Warmer, slightly larger shadow */
-            transform: translateY(-1px); /* Slight lift effect */
+            background: rgba(255, 255, 255, 0.65);
+            /* Becomes slightly more solid on hover */
+            box-shadow: 0 6px 12px rgba(139, 115, 85, 0.15);
+            /* Warmer, slightly larger shadow */
+            transform: translateY(-1px);
+            /* Slight lift effect */
         }
 
 
@@ -282,30 +352,38 @@ background: rgba(255, 255, 255, 0.65); /* Becomes slightly more solid on hover *
             text-overflow: ellipsis;
         }
 
-/* Tooltip Styles */
-#tooltip {
-    position: absolute;
-    text-align: center;
-    padding: 8px 12px;
-    font-family: 'Noto Naskh Arabic', sans-serif;
-    font-size: 14px;
-    font-weight: bold;
-    color: #fff;
-    background: rgba(0, 0, 0, 0.8);
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    pointer-events: none; /* Prevents the tooltip from blocking mouse events */
-    opacity: 0; /* Hidden by default */
-    direction: rtl; /* Right-to-left text direction */
-    box-shadow: 0px 4px 6px rgba(0,0,0,0.1);
-    z-index: 2000; /* Ensures it stays on top of everything */
-    /* --- NEW RULES FOR SIZE AND TEXT WRAPPING --- */
-    width: 250px; /* Set a fixed width. Adjust this number as needed */
-    /* max-width: 250px;  <-- Alternatively, use max-width if you want it to shrink for shorter names */
-    white-space: normal; /* Forces the text to wrap to the next line */
-    word-wrap: break-word; /* Ensures long words don't spill out of the box */
-    line-height: 1.6; /* Adds a bit of vertical space between lines making Arabic text much easier to read */
-}
+        /* Tooltip Styles */
+        #tooltip {
+            position: absolute;
+            text-align: center;
+            padding: 8px 12px;
+            font-family: 'Noto Naskh Arabic', sans-serif;
+            font-size: 14px;
+            font-weight: bold;
+            color: #fff;
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            pointer-events: none;
+            /* Prevents the tooltip from blocking mouse events */
+            opacity: 0;
+            /* Hidden by default */
+            direction: rtl;
+            /* Right-to-left text direction */
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 2000;
+            /* Ensures it stays on top of everything */
+            /* --- NEW RULES FOR SIZE AND TEXT WRAPPING --- */
+            width: 250px;
+            /* Set a fixed width. Adjust this number as needed */
+            /* max-width: 250px;  <-- Alternatively, use max-width if you want it to shrink for shorter names */
+            white-space: normal;
+            /* Forces the text to wrap to the next line */
+            word-wrap: break-word;
+            /* Ensures long words don't spill out of the box */
+            line-height: 1.6;
+            /* Adds a bit of vertical space between lines making Arabic text much easier to read */
+        }
 
         /* Search Box Styles */
         /* Container for Centering */
@@ -318,18 +396,26 @@ background: rgba(255, 255, 255, 0.65); /* Becomes slightly more solid on hover *
 
         /* Input Box */
         .search-container input[type="text"] {
-            background: rgba(255, 255, 255, 0.35); /* Semi-transparent white */
-            backdrop-filter: blur(8px); /* Frosted glass blur effect */
-            -webkit-backdrop-filter: blur(8px); /* For Safari support */
-            border: 1px solid rgba(139, 115, 85, 0.4); /* Soft, warm vintage brown border */
-            color: #4a3b32; /* Deep warm brown text to match the parchment vibe */
+            background: rgba(255, 255, 255, 0.35);
+            /* Semi-transparent white */
+            backdrop-filter: blur(8px);
+            /* Frosted glass blur effect */
+            -webkit-backdrop-filter: blur(8px);
+            /* For Safari support */
+            border: 1px solid rgba(139, 115, 85, 0.4);
+            /* Soft, warm vintage brown border */
+            color: #4a3b32;
+            /* Deep warm brown text to match the parchment vibe */
             font-family: 'Noto Naskh Arabic', sans-serif;
             font-size: 14px;
             font-weight: bold;
             padding: 10px 16px;
-            border-radius: 8px; /* Smooth, modern rounded corners */
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05); /* Very soft shadow */
-            transition: all 0.3s ease; /* Smooth transition for hovering */
+            border-radius: 8px;
+            /* Smooth, modern rounded corners */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            /* Very soft shadow */
+            transition: all 0.3s ease;
+            /* Smooth transition for hovering */
             outline: none;
 
             font-family: 'Noto Naskh Arabic', sans-serif;
@@ -373,7 +459,8 @@ background: rgba(255, 255, 255, 0.65); /* Becomes slightly more solid on hover *
             padding: 10px;
             cursor: pointer;
             direction: rtl;
-            border-bottom: 1px solid rgba(139, 115, 85, 0.3); /* Soft warm divider line */
+            border-bottom: 1px solid rgba(139, 115, 85, 0.3);
+            /* Soft warm divider line */
             /* Ensure items also follow right-to-left */
             text-align: right;
             /* Align text to the right */
@@ -381,15 +468,20 @@ background: rgba(255, 255, 255, 0.65); /* Becomes slightly more solid on hover *
 
         /* Search Results Items Hover Effect */
         ul#search-results li:hover {
-background: rgba(255, 255, 255, 0.5) !important; /* Highlight item on hover */
+            background: rgba(255, 255, 255, 0.5) !important;
+            /* Highlight item on hover */
         }
 
         /* Style the search box when it is clicked/focused */
         #search-box:focus {
-            background: rgba(255, 255, 255, 0.85); /* Becomes more solid and bright */
-            border: 2px solid #8b7355; /* A stronger, darker warm brown border */
-            box-shadow: 0 0 10px rgba(139, 115, 85, 0.3); /* A soft warm glow around the box */
-            outline: none; /* Prevents the default browser blue outline */
+            background: rgba(255, 255, 255, 0.85);
+            /* Becomes more solid and bright */
+            border: 2px solid #8b7355;
+            /* A stronger, darker warm brown border */
+            box-shadow: 0 0 10px rgba(139, 115, 85, 0.3);
+            /* A soft warm glow around the box */
+            outline: none;
+            /* Prevents the default browser blue outline */
         }
 
         @media (max-width: 600px) {
@@ -456,25 +548,35 @@ background: rgba(255, 255, 255, 0.5) !important; /* Highlight item on hover */
 
             #button-container {
                 top: 120px;
-                width: 90%; /* Increased from 60% to give the buttons more horizontal space */
+                width: 90%;
+                /* Increased from 60% to give the buttons more horizontal space */
             }
 
             #expand-collapse-btn {
                 font-size: 13px !important;
-                padding: 3px 3px !important; /* Added more padding for breathing room */
-                width: auto !important; /* Removed the restrictive 120px width */
-                max-width: 70%; /* Prevents it from taking up the entire screen */
-                height: auto !important; /* Removed the restrictive 35px height */
-                min-height: 40px; /* Ensures it's tall enough to easily tap */
+                padding: 3px 3px !important;
+                /* Added more padding for breathing room */
+                width: auto !important;
+                /* Removed the restrictive 120px width */
+                max-width: 70%;
+                /* Prevents it from taking up the entire screen */
+                height: auto !important;
+                /* Removed the restrictive 35px height */
+                min-height: 40px;
+                /* Ensures it's tall enough to easily tap */
                 border-radius: 10px;
-                display: flex !important; /* Activates Flexbox */
-                align-items: center !important; /* Centers text vertically */
-                justify-content: center !important; /* Centers text horizontally */
+                display: flex !important;
+                /* Activates Flexbox */
+                align-items: center !important;
+                /* Centers text vertically */
+                justify-content: center !important;
+                /* Centers text horizontally */
                 text-align: center !important;
-                line-height: 1.4 !important; /* Adds a bit of space between lines if the text wraps */
+                line-height: 1.4 !important;
+                /* Adds a bit of space between lines if the text wraps */
             }
 
-            
+
 
             #instructions {
                 top: 170px;
@@ -482,19 +584,28 @@ background: rgba(255, 255, 255, 0.5) !important; /* Highlight item on hover */
             }
 
             #view-stats-btn {
-                top: 190px !important; /* Decrease this number to move it higher, increase to move it lower */                left: 50%;
+                top: 190px !important;
+                /* Decrease this number to move it higher, increase to move it lower */
+                left: 50%;
                 transform: translateX(-50%);
                 /* Center horizontally */
                 font-size: 13px;
                 font-weight: bold;
                 /* Add bold styling */
-                height: auto !important; /* Removes any restrictive fixed height */
-                min-height: 40px; /* Ensures the button is tall enough to easily tap */
-                padding: 8px 16px !important; /* Adds safe breathing room around the text */
-                display: flex !important; /* Activates Flexbox layout */
-                align-items: center !important; /* Forces perfect vertical centering */
-                justify-content: center !important; /* Forces perfect horizontal centering */
-                line-height: normal !important; /* Allows the Arabic font to take its natural vertical space */
+                height: auto !important;
+                /* Removes any restrictive fixed height */
+                min-height: 40px;
+                /* Ensures the button is tall enough to easily tap */
+                padding: 8px 16px !important;
+                /* Adds safe breathing room around the text */
+                display: flex !important;
+                /* Activates Flexbox layout */
+                align-items: center !important;
+                /* Forces perfect vertical centering */
+                justify-content: center !important;
+                /* Forces perfect horizontal centering */
+                line-height: normal !important;
+                /* Allows the Arabic font to take its natural vertical space */
             }
 
         }
@@ -541,6 +652,7 @@ background: rgba(255, 255, 255, 0.5) !important; /* Highlight item on hover */
             let firstHighlightDelay = 250, secondHighlightDelay = 800, thirdHighlightDelay = 1200, fourthHighlightDelay = 300;
 
             let zoomLevel = 1; // Initial zoom level
+            let currentAdjustment = 0; // Tracks horizontal layout shifts
 
             const svg = d3.select("svg")
                 .attr("width", width)
@@ -567,21 +679,21 @@ background: rgba(255, 255, 255, 0.5) !important; /* Highlight item on hover */
             let initialHorizontalOffset = width / 2 + 19;
             let initialHorizontalForMobile = 79;
 
-// 1. Create the tooltip div and append it to the body
-const tooltip = d3.select("body").append("div")
-    .attr("id", "tooltip")
-    .style("opacity", 0);
+            // 1. Create the tooltip div and append it to the body
+            const tooltip = d3.select("body").append("div")
+                .attr("id", "tooltip")
+                .style("opacity", 0);
 
-// 2. Function to calculate the full lineage string (e.g. أنس بن سعود بن...)
-function getFullName(d) {
-    let names = [];
-    let current = d;
-    while (current) {
-        names.push(current.data.name);
-        current = current.parent;
-    }
-    return names.join(' بن ');
-}
+            // 2. Function to calculate the full lineage string (e.g. أنس بن سعود بن...)
+            function getFullName(d) {
+                let names = [];
+                let current = d;
+                while (current) {
+                    names.push(current.data.name);
+                    current = current.parent;
+                }
+                return names.join(' بن ');
+            }
 
             // Function to reverse children of each node
             function reverseChildren(node) {
@@ -624,14 +736,14 @@ function getFullName(d) {
 
                 // Calculate the minimum x-coordinate to adjust the tree position
                 const minX = Math.min(...nodes.map(d => d.x));
-                const adjustment = Math.max(0, 100 - minX); // Ensure minimum padding of 200
+                currentAdjustment = Math.max(0, 100 - minX); // Ensure minimum padding of 200
 
                 // Calculate the maximum x-coordinate to adjust the SVG height
                 const maxX = Math.max(...nodes.map(d => d.x));
                 const newHeight = maxX + 200; // Add padding of 200
 
                 // Adjust the tree position dynamically
-                svgGroup.attr("transform", `translate(${adjustment} , 230) scale(${zoomLevel})`);
+                svgGroup.attr("transform", `translate(${currentAdjustment} , 230) scale(${zoomLevel})`);
                 // Adjust the SVG height dynamically
                 d3.select("svg").attr("height", newHeight);
 
@@ -639,17 +751,17 @@ function getFullName(d) {
                     .data(nodes, d => d.id || (d.id = ++i));
 
                 const nodeEnter = node.enter().append('g')
-    .attr('class', 'node')
-    .attr('transform', d => {
-        if (isMobile()) {
-            return `translate(${source.x + initialHorizontalForMobile},${source.y0 + initialVerticalOffset})`;
-        } else {
-            return `translate(${source.x + initialHorizontalOffset},${source.y0 + initialVerticalOffset})`;
-        }
-    })
-    .attr('data-id', d => d.id) 
-    .on('click', click)
-    
+                    .attr('class', 'node')
+                    .attr('transform', d => {
+                        if (isMobile()) {
+                            return `translate(${source.x + initialHorizontalForMobile},${source.y0 + initialVerticalOffset})`;
+                        } else {
+                            return `translate(${source.x + initialHorizontalOffset},${source.y0 + initialVerticalOffset})`;
+                        }
+                    })
+                    .attr('data-id', d => d.id)
+                    .on('click', click)
+
 
                 nodeEnter.append('rect')
                     .attr('width', 100)
@@ -672,7 +784,7 @@ function getFullName(d) {
                 // Create a group for the children badge, positioned at the bottom middle (y = 15)
                 const badge = nodeEnter.append('g')
                     .attr('class', 'children-badge')
-                    .attr('transform', 'translate(0, 24)') 
+                    .attr('transform', 'translate(0, 24)')
                     .style('display', d => (d.children || d._children) ? null : 'none');
 
                 // Add the circle background
@@ -684,14 +796,14 @@ function getFullName(d) {
 
                 // Add the number text inside the circle
                 badge.append('text')
-                    .attr('dy', '0.35em') 
-                    .attr('text-anchor', 'middle') 
+                    .attr('dy', '0.35em')
+                    .attr('text-anchor', 'middle')
                     .attr('font-family', 'Noto Naskh Arabic, sans-serif')
                     .attr('font-size', '11px')
                     .attr('font-weight', 'bold')
                     .style('fill', '#fff') // White text
                     .text(d => d.children ? d.children.length : (d._children ? d._children.length : ''));
-               
+
                 const nodeUpdate = nodeEnter.merge(node);
 
                 nodeUpdate.transition()
@@ -716,7 +828,7 @@ function getFullName(d) {
                     .attr('class', d => d._children ? 'has-children' : '')
                     .style('fill', d => d._children ? "lightsteelblue" : "#fff");
 
-                    // Change the badge circle color dynamically
+                // Change the badge circle color dynamically
                 nodeUpdate.select('.children-badge circle')
                     .style('fill', d => d._children ? "#ea5050" : "#95a5a6"); // Red if collapsed, Gray if expanded
 
@@ -811,27 +923,37 @@ function getFullName(d) {
                     d._children = d.children.concat(d._children || []);
                     d.children = null;
                     hasChanges = true;
-                    centerTopNode();
-
                 } else {
                     if (d._children) {
                         d.children = d._children;
                         d._children = null;
                         hasChanges = true;
-                        centerTopNode();
 
                         d.children.forEach(child => {
                             if (child.children) {
                                 child._children = child.children;
                                 child.children = null;
-
                             }
                         });
                     }
                 }
+
                 if (hasChanges) {
-                    update(d);
-                    centerTopNode();
+                    // 1. Calculate the absolute X/Y of the clicked node BEFORE the layout updates
+                    const horizontalOffset = isMobile() ? initialHorizontalForMobile : initialHorizontalOffset;
+                    const oldX = (currentAdjustment + d.x0 + horizontalOffset) * zoomLevel;
+                    const oldY = (230 + d.y0 + initialVerticalOffset) * zoomLevel;
+
+                    update(d); // Triggers D3 to calculate the new tree shape
+
+                    // 2. Calculate the absolute X/Y of the clicked node AFTER the layout updates
+                    const newX = (currentAdjustment + d.x + horizontalOffset) * zoomLevel;
+                    const newY = (230 + d.y + initialVerticalOffset) * zoomLevel;
+
+                    // 3. Scroll the container by the exact difference to keep the node perfectly stationary
+                    const treeContainer = document.getElementById('tree-container');
+                    treeContainer.scrollLeft += (newX - oldX);
+                    treeContainer.scrollTop += (newY - oldY);
                 }
             }
 
@@ -999,17 +1121,17 @@ function getFullName(d) {
                     return;
                 }
                 const matchedNames = searchTreeNames(data, query);
-                
+
                 // Add the index to the loop
                 matchedNames.forEach((fullName, index) => {
                     const li = document.createElement('li');
-                    
+
                     // Format the output to include the number: "1- الاسم"
-                    li.innerText = `${index + 1}- ${fullName}`; 
-                    
+                    li.innerText = `${index + 1}- ${fullName}`;
+
                     li.addEventListener('click', function () {
                         // Keep using the original fullName for the search logic!
-                        focusOnNodeFromSearch(fullName); 
+                        focusOnNodeFromSearch(fullName);
                         searchResults.style.display = 'none';
                     });
                     searchResults.appendChild(li);
@@ -1034,29 +1156,29 @@ function getFullName(d) {
                 if (topNode && treeContainer) {
                     const topNodeBox = topNode.getBoundingClientRect();
                     const containerBox = treeContainer.getBoundingClientRect();
-                    const scrollLeft = topNodeBox.left - containerBox.left + (topNodeBox.width / 2) - (containerBox.width / 2);
-                    const scrollTop = topNodeBox.top - containerBox.top + (topNodeBox.height / 2) - (containerBox.height / 2);
-                    treeContainer.scrollLeft = scrollLeft;
-                    treeContainer.scrollTop = scrollTop;
+
+                    // Use += to adjust current scroll relative to the screen difference
+                    treeContainer.scrollLeft += (topNodeBox.left - containerBox.left) - (containerBox.width / 2) + (topNodeBox.width / 2);
+                    treeContainer.scrollTop += (topNodeBox.top - containerBox.top) - (containerBox.height / 2) + (topNodeBox.height / 2);
                 }
             }
 
             function toggleTree() {
                 // Temporarily store the original duration (50) and set it to 0 for instant rendering
                 let originalDuration = duration;
-                duration = 0; 
+                duration = 0;
 
                 if (root.children) {
                     collapseAll(root);
                 } else {
                     expandAll(root);
                 }
-                
+
                 update(root);
                 centerTopNode();
 
                 // Restore the original duration so single clicks stay smooth
-                duration = originalDuration; 
+                duration = originalDuration;
             }
 
             function collapseAll(d) {
