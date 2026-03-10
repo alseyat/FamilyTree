@@ -5,13 +5,14 @@
     <link rel="preload" as="image" href="logo.png">
 
     <meta charset="UTF-8">
-    <title>إحصائيات شجرة أسرة السياط</title>
+    <title>نبذة عن أسرة السياط</title>
+
     <link rel="icon" href="favicon_io/favicon.ico" type="image/x-icon">
 
     <link rel="icon" href="favicon_io/favicon-32x32.png" type="image/png">
-    <link rel="stylesheet" href="style.css">
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;700&display=swap');
         @import url('https://fonts.googleapis.com/css2?family=Reem+Kufi+Ink:wght@400;700&display=swap');
@@ -36,17 +37,22 @@
             padding: 30px 20px 0px;
         }
 
-
         .header img {
             max-height: 350px;
 
             width: auto;
         }
 
+        .header h1 {
+            font-family: 'Reem Kufi Ink', sans-serif;
+            font-size: 32px;
+            margin: 0;
+            color: #4a3b32;
+        }
+
         /* حاوية المحتوى (البطاقة الشفافة) */
         .content-container {
             max-width: 800px;
-            width: 85%;
             margin: 20px auto 40px;
             padding: 40px;
             background: rgba(255, 255, 255, 0.55);
@@ -55,11 +61,11 @@
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
             flex-grow: 1;
+            /* لتمديد المساحة ودفع الفوتر للأسفل */
         }
 
-        /* تنسيق العناوين والإحصائيات */
+        /* تنسيق النصوص والعناوين الداخلية */
         .content-container h2 {
-            text-align: center;
             color: #8b7355;
             font-size: 22px;
             border-bottom: 2px solid rgba(139, 115, 85, 0.2);
@@ -67,51 +73,15 @@
             margin-top: 30px;
         }
 
-        .total-members {
-            text-align: center;
-            margin-bottom: 20px;
-            font-size: 24px;
-            font-weight: bold;
-            color: #4a3b32;
-            background: rgba(139, 115, 85, 0.1);
-            padding: 15px;
-            border-radius: 10px;
-            border: 1px solid rgba(139, 115, 85, 0.2);
+        .content-container h2:first-of-type {
+            margin-top: 0;
         }
 
-        ul {
-            list-style-type: none;
-            padding: 0;
-        }
-
-        .top-names li {
-            background: rgba(255, 255, 255, 0.8);
-            margin: 8px 0;
-            padding: 12px 20px;
-            border: 1px solid rgba(139, 115, 85, 0.2);
-            border-radius: 8px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.02);
+        .content-container p {
             font-size: 16px;
-        }
-
-        .name {
-            flex: 1;
-            text-align: right;
-            font-weight: bold;
-            color: #4a3b32;
-        }
-
-        .count {
-            text-align: center;
-            background: #8b7355;
-            color: #f4efdf;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-weight: bold;
-            min-width: 30px;
+            line-height: 2;
+            text-align: justify;
+            margin-bottom: 15px;
         }
 
         /* زر العودة للشجرة */
@@ -153,23 +123,19 @@
         /* توافق الشاشات الصغيرة (الجوال) */
         @media (max-width: 768px) {
             .content-container {
-                margin: 15px auto;
+                margin: 15px;
                 padding: 25px;
-                width: 90%;
             }
 
             .header img {
                 max-height: 200px;
-            }
-
-            .top-names li {
-                padding: 10px 15px;
             }
         }
     </style>
 </head>
 
 <body>
+
     <div id="floating-menu-container">
         <button id="menu-icon-btn" class="floating-btn">
             <svg viewBox="0 0 24 24" width="20" height="20" stroke="#4a3b32" stroke-width="2.5" fill="none"
@@ -183,107 +149,47 @@
         <div id="menu-dropdown">
             <a href="index.html" class="menu-item">الرئيسية</a>
             <a href="tree.html" class="menu-item">شجرة الأسرة</a>
-            <!-- <a href="about.html" class="menu-item">نبذة عن الأسرة</a> -->
+            <a href="about.html" class="menu-item">نبذة عن الأسرة</a>
             <button id="view-stats-btn" class="menu-item">إحصائيات</button>
         </div>
     </div>
+
     <div class="header">
         <img src="logo.png" alt="شعار شجرة السياط">
     </div>
 
     <div class="content-container">
-        <div class="total-members" id="total-members"></div>
 
-        <h2>أكثر الأسماء تكراراً</h2>
-        <ul id="top-names" class="top-names"></ul>
+        <h2>نبذة عن الأسرة</h2>
+        <p>
+            يعود نسب أسرة السياط إلى عشيرة أهل الحجلا من الزقاريط من عبدة من قبيلة شمر الطائية العريقة، وهم يرجعون إلى
+            جدّهم/ سياط بن عودة بن محمد بن علّيق بن محمد بن سليمان (جد الحجلا) بن نافع بن عمار بن زقروط الربيعي العبدي
+            الشمري، وهو أول من سكن مدينة سكاكا من السكان الحاليين وذلك قبل أكثر من 400 عام والتي استوطن فيها فيما بعد
+            العديد من القبائل والعوائل.
+        </p>
+        <p>
+            والشواهد على أسبقية سياط في استيطان سكاكا كثيرة، فمسكنه القديم تحت قلعة زعبل الأثرية لازال قائمًا، وقد اختار
+            السكن تحتها كي يحتمي بها هو وأبناؤه، وقد حفر أول بئر ماء في سكاكا وزرع نخلته التي جاء بها وعُرفت إلى يومنا
+            هذا باسم "السياطية" ومن مزاياها أنها أول ما يستوي من التمور بالصيف.
+        </p>
+        <p>
+            وقد زوّج سياط ابنته سلمى لقريش الخالدي الذي أنجب مختار، ومختار أنجب ضويحي وعلي، ومنهما سلالة القرشة من بني
+            خالد الآن بمنطقة الجوف وهم آل ضويحي وآل علي، وبعد استيطان السياط في الجوف صار لهم علاقات مصاهرة ونسب مع كثير
+            من القبائل الأخرى.
+        </p>
 
-        <ul id="top-children" class="top-children"></ul>
 
         <div class="back-btn-container">
             <a href="tree.html" class="back-btn">العودة إلى شجرة الأسرة</a>
         </div>
+
     </div>
 
     <footer class="bottom-footer">
         إعداد وتصميم: م. أنس بن سعود السياط
     </footer>
-
-    <script type="module">
-        import data from './alseyat.js';
-
-        function prepareStatistics(data) {
-            const nameCount = {};
-            const childrenCount = [];
-            let totalMembers = 0;
-
-            function computeStatistics(node, fullName = "") {
-                totalMembers++;
-
-                const currentFullName = fullName ? `${node.name} بن ${fullName}` : node.name;
-
-                if (nameCount[node.name]) {
-                    nameCount[node.name]++;
-                } else {
-                    nameCount[node.name] = 1;
-                }
-
-                const numChildren = node.children ? node.children.length : 0;
-                if (numChildren > 0) {
-                    childrenCount.push({ fullName: currentFullName, children: numChildren });
-                }
-
-                if (node.children) {
-                    node.children.forEach(child => computeStatistics(child, currentFullName));
-                }
-            }
-
-            computeStatistics(data);
-
-            const groupedNames = {};
-            Object.entries(nameCount).forEach(([name, count]) => {
-                if (!groupedNames[count]) {
-                    groupedNames[count] = [];
-                }
-                groupedNames[count].push(name);
-            });
-
-            const topNames = Object.entries(groupedNames)
-                .map(([count, names]) => [names.join('، '), parseInt(count)])
-                .sort((a, b) => b[1] - a[1]);
-
-            const groupedChildren = {};
-            childrenCount.forEach(({ fullName, children }) => {
-                if (!groupedChildren[children]) {
-                    groupedChildren[children] = [];
-                }
-                groupedChildren[children].push(fullName);
-            });
-
-            const topChildren = Object.entries(groupedChildren)
-                .map(([children, names]) => ({ names, children: parseInt(children) }))
-                .sort((a, b) => b.children - a.children);
-
-            return { topNames, topChildren, totalMembers };
-        }
-
-        function displayStatistics(statistics) {
-            const { topNames, topChildren, totalMembers } = statistics;
-
-            document.getElementById('total-members').innerText = `إجمالي عدد أفراد الأسرة: ${totalMembers}`;
-
-            const topNamesList = document.getElementById('top-names');
-            topNames.forEach(([names, count]) => {
-                const li = document.createElement('li');
-                li.innerHTML = `<div class="name">${names}</div><div class="count">${count}</div>`;
-                topNamesList.appendChild(li);
-            });
-
-        }
-
-        const statistics = prepareStatistics(data);
-        displayStatistics(statistics);
-    </script>
     <script src="menu.js"></script>
+
 </body>
 
 </html>
