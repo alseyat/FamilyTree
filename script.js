@@ -679,3 +679,49 @@ window.addEventListener('resize', () => {
     treeContainer.scrollLeft = newCenterX - (treeContainer.clientWidth / 2);
     treeContainer.scrollTop = newCenterY - (treeContainer.clientHeight / 2);
 });
+
+// === Pinch-to-Zoom (Mobile Two-Finger Gesture) ===
+(function () {
+    const treeContainer = document.getElementById('tree-container');
+
+    let pinchStartDist = null;
+    let pinchStartZoom = null;
+    let lastAppliedZoom = null;
+
+    function getTouchDist(touches) {
+        const dx = touches[0].clientX - touches[1].clientX;
+        const dy = touches[0].clientY - touches[1].clientY;
+        return Math.hypot(dx, dy);
+    }
+
+    treeContainer.addEventListener('touchstart', function (e) {
+        if (e.touches.length === 2) {
+            pinchStartDist = getTouchDist(e.touches);
+            pinchStartZoom = zoomLevel;
+            lastAppliedZoom = zoomLevel;
+        }
+    }, { passive: true });
+
+    treeContainer.addEventListener('touchmove', function (e) {
+        if (e.touches.length !== 2 || pinchStartDist === null) return;
+        e.preventDefault();
+
+        const currentDist = getTouchDist(e.touches);
+        const rawScale = currentDist / pinchStartDist;
+        const newZoom = Math.min(1, Math.max(0.2, pinchStartZoom * rawScale));
+
+        if (Math.abs(newZoom - lastAppliedZoom) < 0.005) return;
+
+        lastAppliedZoom = newZoom;
+        applyZoom(newZoom);
+
+    }, { passive: false });
+
+    treeContainer.addEventListener('touchend', function (e) {
+        if (e.touches.length < 2) {
+            pinchStartDist = null;
+            pinchStartZoom = null;
+            lastAppliedZoom = null;
+        }
+    }, { passive: true });
+})();
