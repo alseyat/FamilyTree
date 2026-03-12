@@ -30,7 +30,8 @@ function isMobile() {
 }
 const viewportWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
 
-let initialVerticalOffset = 250;
+const overlay = document.getElementById('header-overlay');
+let initialVerticalOffset = (overlay ? overlay.offsetHeight : 0) + 40;
 let initialHorizontalOffset = width / 2 + 19;
 let initialHorizontalForMobile = 79;
 
@@ -259,6 +260,7 @@ svgGroup.attr("transform", `translate(${currentAdjustment} , ${verticalStart}) s
     if (center) {
         centerTopNode();
     }
+
 }
 
 function click(event, d) {
@@ -645,6 +647,7 @@ update(root);
 // === Smooth UI Hide/Show on Scroll ===
 const uiWrapper = document.getElementById('ui-wrapper');
 const treeContainerElement = document.getElementById('tree-container');
+const headerOverlay = document.getElementById('header-overlay');
 
 // === Refined UI Hide/Show on Scroll ===
 treeContainerElement.addEventListener('scroll', () => {
@@ -655,12 +658,14 @@ treeContainerElement.addEventListener('scroll', () => {
     // 1. If we scroll down, hide the UI immediately
     if (scrollTop > 50) {
         uiWrapper.classList.add('hidden');
+        if (headerOverlay) headerOverlay.classList.add('hidden');
     } 
     // 2. Only show the logo if we are at the very top AND 
     // the tree is actually long enough to require scrolling.
     else if (scrollTop <= 5) {
         if (scrollHeight > clientHeight + 100) {
             uiWrapper.classList.remove('hidden');
+            if (headerOverlay) headerOverlay.classList.remove('hidden');
         }
     }
 });

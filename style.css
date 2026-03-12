@@ -549,3 +549,74 @@ ul#search-results li:hover {
         width: 210px; /* Slightly smaller on mobile screens */
     }
 }
+
+/* =========================================
+   Fixed Header Overlay: Logo + Lineage Text
+   - Sits fixed at top-center of the viewport
+   - Never moves or scales with the tree
+   - Fades out when scrolling down, returns at top
+========================================= */
+
+#header-overlay {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 900; /* Below floating buttons (1001) but above tree */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 14px 24px 10px;
+    pointer-events: none; /* Lets clicks pass through to the tree */
+    width: 100%;        /* ADD THIS */
+
+    /* Smooth show/hide transition */
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.4s ease, transform 0.4s ease, visibility 0.4s;
+    transition-delay: 0.1s;
+}
+
+#header-overlay.hidden {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(-50%) translateY(-20px);
+    transition-delay: 0s;
+}
+
+#header-logo {
+    max-height: 110px;
+    width: auto;
+    margin-bottom: 6px;
+    filter: drop-shadow(0 2px 8px rgba(0,0,0,0.18));
+}
+
+#lineage-text {
+    margin: 0;
+    font-family: 'Noto Naskh Arabic', sans-serif;
+    font-size: clamp(13px, 1.5vw, 20px);
+    font-weight: 700;
+    color: #3a2c1e;
+    direction: rtl;
+    text-align: center;
+    line-height: 1.7;
+    letter-spacing: 0.02em;
+    max-width: 55vw;
+    /* Soft warm text-shadow for elegance */
+    text-shadow:
+        0 1px 0 rgba(255,255,255,0.8),
+        0 2px 8px rgba(139, 115, 85, 0.25);
+    /* Subtle decorative underline */
+    border-bottom: 1.5px solid rgba(139, 115, 85, 0.35);
+    padding-bottom: 4px;
+}
+
+@media (max-width: 600px) {
+    #header-logo {
+        max-height: 70px;
+    }
+    #lineage-text {
+        font-size: 12px;
+        max-width: 65vw;
+    }
+}
