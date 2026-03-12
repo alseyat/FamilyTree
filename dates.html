@@ -165,6 +165,78 @@
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
         }
 
+        /* Themed image frame */
+        .dates-image-container {
+            text-align: center;
+            margin: 0 0 30px 0;
+        }
+
+        .dates-image-frame {
+            display: inline-block;
+            position: relative;
+            padding: 12px;
+            background: linear-gradient(145deg, #c9a96e, #8b7355, #c9a96e, #6b5340, #c9a96e);
+            border-radius: 4px;
+            box-shadow:
+                0 0 0 2px #f4efdf,
+                0 0 0 4px #8b7355,
+                0 8px 25px rgba(74, 59, 50, 0.35);
+        }
+
+        .dates-image-frame::before {
+            content: '';
+            position: absolute;
+            inset: 5px;
+            border: 1.5px solid rgba(244, 239, 223, 0.5);
+            border-radius: 2px;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Corner ornaments */
+        .dates-image-frame::after {
+            content: '✦';
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #c9a96e;
+            font-size: 18px;
+            text-shadow: 0 0 6px rgba(201, 169, 110, 0.6);
+        }
+
+        .corner-ornament {
+            position: absolute;
+            color: #f4efdf;
+            font-size: 14px;
+            opacity: 0.85;
+            line-height: 1;
+        }
+        .corner-ornament.tl { top: 3px; right: 3px; }
+        .corner-ornament.tr { top: 3px; left: 3px; }
+        .corner-ornament.bl { bottom: 3px; right: 3px; }
+        .corner-ornament.br { bottom: 3px; left: 3px; }
+
+        .dates-image-frame img {
+            display: block;
+            max-width: 100%;
+            width: 500px;
+            height: auto;
+            border-radius: 2px;
+            position: relative;
+            z-index: 0;
+        }
+
+        @media (max-width: 768px) {
+            .dates-image-frame img {
+                /* width: 100%; */
+
+            max-width: 100%;
+            width: 280px;
+            height: auto;
+            }
+        }
+
         .bottom-footer {
             text-align: center;
             padding: 15px;
@@ -214,6 +286,16 @@
     <div class="content-container">
 
         <h1 class="page-title">تمرة "السياطية".. أيقونة الجوف وأول بشائر موسم التمور في الشمال</h1>
+
+        <div class="dates-image-container">
+            <div class="dates-image-frame">
+                <span class="corner-ornament tl">❧</span>
+                <span class="corner-ornament tr">❧</span>
+                <span class="corner-ornament bl">❧</span>
+                <span class="corner-ornament br">❧</span>
+                <img src="dates.jpeg" alt="تمرة السياطية">
+            </div>
+        </div>
 
         <p>
             تعد منطقة الجوف واحدة من أهم سلال الغذاء في المملكة العربية السعودية، حيث ترتبط هويتها الزراعية بعلاقة
