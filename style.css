@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Reem+Kufi+Ink:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@100..900&display=swap');
 
 body {
     font-family: 'Noto Naskh Arabic', sans-serif;
@@ -593,8 +594,8 @@ ul#search-results li:hover {
 
 #lineage-text {
     margin: 0;
-    font-family: 'Noto Naskh Arabic', sans-serif;
-    font-size: clamp(13px, 1.5vw, 20px);
+    font-family: 'Noto Kufi Arabic', sans-serif;
+    font-size: clamp(13px, 1.5vw, 15px);
     font-weight: 700;
     color: #3a2c1e;
     direction: rtl;
@@ -616,7 +617,7 @@ ul#search-results li:hover {
         max-height: 70px;
     }
     #lineage-text {
-        font-size: 12px;
+        font-size: 11px;
         max-width: 65vw;
     }
 }
