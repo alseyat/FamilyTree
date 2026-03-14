@@ -153,12 +153,32 @@ body {
     padding: 12px;
     background: #4a3b32;
     color: #f4efdf;
-    font-family: 'Noto Naskh Arabic', sans-serif;
-    font-size: 14px;
+    font-family: 'Noto Kufi Arabic', sans-serif;
+    font-size: 12px;
     font-weight: bold;
     flex-shrink: 0;
     z-index: 1000;
     box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+
+.footer-whatsapp {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #f4efdf;
+    opacity: 0.85;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    text-decoration: none;
+    line-height: 1;
+}
+
+.footer-whatsapp:hover {
+    opacity: 1;
+    transform: scale(1.15);
 }
 
 
@@ -593,6 +613,8 @@ ul#search-results li:hover {
 }
 
 #lineage-text {
+    opacity: 0;
+    transition: opacity 0.4s ease;
     margin: 0;
     font-family: 'Noto Kufi Arabic', sans-serif;
     font-size: clamp(13px, 1.5vw, 15px);

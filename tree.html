@@ -30,7 +30,9 @@
     <!-- Fixed Header Overlay: logo + lineage text, hides on scroll, never scales with tree -->
     <div id="header-overlay">
         <img src="logo.png" alt="شعار أسرة السياط" id="header-logo">
-<p id="lineage-text">آل سياط من عشيرة أهل الحجلا من الزقاريط من عبدة من قبيلة شمر الطائية وهم ذرية سياط بن عودة بن محمد بن علّيق بن محمد بن سليمان (جد الحجلا) بن نافع بن عمار بن زقروط الربيعي العبدي الشمري</p>    </div>
+        <p id="lineage-text">آل سياط من عشيرة أهل الحجلا من الزقاريط من عبدة من قبيلة شمر الطائية وهم ذرية سياط بن عودة
+            بن محمد بن علّيق بن محمد بن سليمان (جد الحجلا) بن نافع بن عمار بن زقروط الربيعي العبدي الشمري</p>
+    </div>
 
     <div id="floating-search-container">
         <button id="search-icon-btn" class="floating-btn" title="بحث">
@@ -112,7 +114,6 @@
     <div id="tooltip"></div>
 
     <footer class="bottom-footer">
-        إعداد وتصميم: م. أنس بن سعود السياط
     </footer>
 
     <script type="module" src="script.js"></script>
@@ -136,6 +137,12 @@
                 }
             });
         })();
+
+        // In script.js or a <script> in tree.html
+        document.fonts.ready.then(() => {
+            document.getElementById('lineage-text').style.opacity = '1';
+        });
+
     </script>
 </body>
 
