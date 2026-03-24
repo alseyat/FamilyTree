@@ -1,122 +1,533 @@
 <!DOCTYPE html>
-<html lang="Arabic">
+<html lang="ar">
 
 <head>
-
     <link rel="preload" as="image" href="logo.png">
-
-    <link rel="stylesheet" href="style.css">
     <meta charset="UTF-8">
-    <title>شجرة أسرة السياط</title>
-
-    <link rel="icon" href="favicon_io/favicon.ico" type="image/x-icon">
-
-    <link rel="icon" href="favicon_io/favicon-32x32.png" type="image/png">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <script src="https://d3js.org/d3.v6.min.js"></script>
-
+    <title>شجرة أسرة السياط</title>
+    <meta name="description" content="شجرة أسرة السياط التفاعلية — تصفح أفراد الأسرة وأنسابهم">
+    <link rel="icon" href="favicon_io/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="favicon_io/favicon-32x32.png" type="image/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;700&family=Reem+Kufi+Ink:wght@400;700&family=Noto+Kufi+Arabic:wght@100..900&display=swap">
     <link rel="stylesheet" href="style.css">
+    <script src="https://d3js.org/d3.v6.min.js" crossorigin="anonymous"></script>
+    <style>
+        /* ── Death Popup (tree-page only) ── */
+        #death-popup-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.35);
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.25s ease, visibility 0.25s ease;
+        }
+
+        #death-popup-overlay.open {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        #death-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.9);
+            z-index: 2001;
+            background: rgba(244, 239, 223, 0.98);
+            border: 1px solid var(--color-border-strong);
+            border-radius: 16px;
+            padding: 28px 32px;
+            min-width: 280px;
+            max-width: 30vw;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            direction: rtl;
+            text-align: right;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s ease;
+        }
+
+        #death-popup.open {
+            opacity: 1;
+            visibility: visible;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        #death-popup-name {
+            font-family: var(--font-heading);
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--color-text);
+            line-height: 1.8;
+            margin-bottom: 6px;
+            text-align: center;
+        }
+
+        #death-popup-rahma {
+            font-family: var(--font-body);
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--color-text-light);
+            margin-bottom: 14px;
+            border-bottom: 1px solid rgba(139, 115, 85, 0.2);
+            padding-bottom: 12px;
+            text-align: center;
+        }
+
+        #death-popup-date {
+            font-family: var(--font-body);
+            font-size: 15px;
+            color: var(--color-text-light);
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        #death-popup-date::before {
+            content: '❖';
+            font-size: 16px;
+            opacity: 0.8;
+        }
+
+        #death-popup-close {
+            display: block;
+            margin: 18px auto 0;
+            background: var(--color-dark);
+            color: var(--color-cream);
+            border: none;
+            border-radius: var(--radius-sm);
+            padding: 8px 24px;
+            font-family: var(--font-body);
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        #death-popup-close:hover {
+            background: var(--color-text-light);
+        }
+
+        #death-popup-portrait {
+            display: block;
+            width: 100%;
+            min-width: 120px;
+            min-height: 120px;
+            max-width: 200px;
+            height: auto;
+            border-radius: var(--radius-md);
+            margin: 0 auto 14px;
+            border: 2px solid rgba(139, 115, 85, 0.35);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+            object-fit: cover;
+            cursor: zoom-in;
+        }
+
+        /* ── Portrait Lightbox ── */
+        #portrait-lightbox {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background: rgba(0, 0, 0, 0.82);
+            backdrop-filter: blur(6px);
+            align-items: center;
+            justify-content: center;
+        }
+
+        #portrait-lightbox.open {
+            display: flex;
+        }
+
+        #portrait-lightbox img {
+            width: min(90vw, 520px);
+            height: 85vh;
+            border-radius: var(--radius-md);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            object-fit: contain;
+            display: block;
+            animation: lb-in 0.2s ease;
+        }
+
+        @keyframes lb-in {
+            from { opacity: 0; transform: scale(0.92); }
+            to   { opacity: 1; transform: scale(1); }
+        }
+
+        #lightbox-close {
+            position: absolute;
+            top: 18px;
+            left: 18px;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.15);
+            border: none;
+            color: #fff;
+            font-size: 20px;
+            line-height: 1;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+
+        #lightbox-close:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        #death-popup-label {
+            font-family: var(--font-heading);
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--color-text);
+        }
+
+        @media (max-width: 768px) {
+            #death-popup {
+                max-width: 60vw;
+            }
+        }
+
+        @media (max-width: 480px) {
+            #death-popup {
+                max-width: 85vw;
+            }
+        }
+
+        /* ── Alive Portrait Popup ── */
+        #portrait-popup-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.35);
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.25s ease, visibility 0.25s ease;
+        }
+
+        #portrait-popup-overlay.open {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        #portrait-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.9);
+            z-index: 2001;
+            background: rgba(244, 239, 223, 0.98);
+            border: 1px solid var(--color-border-strong);
+            border-radius: 16px;
+            padding: 28px 32px;
+            min-width: 240px;
+            max-width: 30vw;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            direction: rtl;
+            text-align: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s ease;
+        }
+
+        #portrait-popup.open {
+            opacity: 1;
+            visibility: visible;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        #portrait-popup-img {
+            display: block;
+            width: 100%;
+            min-width: 120px;
+            min-height: 120px;
+            max-width: 200px;
+            height: auto;
+            border-radius: var(--radius-md);
+            margin: 0 auto 14px;
+            border: 2px solid rgba(107, 142, 107, 0.4);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+            object-fit: cover;
+            cursor: zoom-in;
+        }
+
+        #portrait-popup-name {
+            font-family: var(--font-heading);
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--color-text);
+            line-height: 1.8;
+            margin-bottom: 14px;
+        }
+
+        #portrait-popup-close {
+            display: block;
+            margin: 4px auto 0;
+            background: var(--color-dark);
+            color: var(--color-cream);
+            border: none;
+            border-radius: var(--radius-sm);
+            padding: 8px 24px;
+            font-family: var(--font-body);
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        #portrait-popup-close:hover {
+            background: var(--color-text-light);
+        }
+
+        @media (max-width: 768px) {
+            #portrait-popup { max-width: 60vw; }
+        }
+
+        @media (max-width: 480px) {
+            #portrait-popup { max-width: 85vw; }
+        }
+
+        /* ── Portrait loading indicator ── */
+        #portrait-loading {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2100;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(244, 239, 223, 0.97);
+            border: 1px solid var(--color-border-strong);
+            border-radius: 50px;
+            padding: 14px 22px;
+            box-shadow: 0 8px 28px rgba(0, 0, 0, 0.15);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.15s ease, visibility 0.15s ease;
+            pointer-events: none;
+        }
+
+        #portrait-loading.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        #portrait-loading span {
+            display: block;
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background: var(--color-accent);
+            animation: loading-bounce 1.1s ease-in-out infinite;
+        }
+
+        #portrait-loading span:nth-child(2) { animation-delay: 0.18s; }
+        #portrait-loading span:nth-child(3) { animation-delay: 0.36s; }
+
+        @keyframes loading-bounce {
+            0%, 70%, 100% { transform: translateY(0);   opacity: 0.35; }
+            35%            { transform: translateY(-7px); opacity: 1; }
+        }
+    </style>
 </head>
 
-<body>
-    <div id="ui-wrapper">
+<body class="tree-page">
+    <div id="ui-wrapper"></div>
 
-
-
-    </div>
-
-    <!-- Fixed Header Overlay: logo + lineage text, hides on scroll, never scales with tree -->
+    <!-- Fixed Header Overlay: logo + lineage text -->
     <div id="header-overlay">
-        <img src="logo.png" alt="شعار أسرة السياط" id="header-logo">
-        <p id="lineage-text">آل سياط من عشيرة أهل الحجلا من الزقاريط من عبدة من قبيلة شمر الطائية وهم ذرية سياط بن عودة
-            بن محمد بن علّيق بن محمد بن سليمان (جد الحجلا) بن نافع بن عمار بن زقروط الربيعي العبدي الشمري</p>
+        <img src="tree.png" alt="شعار أسرة السياط" id="header-logo">
+        <p id="lineage-text">آل سياط من عشيرة أهل الحجلا من الزقاريط من الربيعية من عبدة من قبيلة شمر الطائية<br>وهم
+            ذرية سياط بن عودة بن محمد بن علّيق بن محمد بن سليمان (جد الحجلا) بن نافع بن عمار بن زقروط الربيعي العبدي
+            الشمري</p>
     </div>
 
-    <div id="floating-search-container">
-        <button id="search-icon-btn" class="floating-btn" title="بحث">
+    <!-- Right-side control column: search → controls → share -->
+    <!-- Search wrapper lives outside #right-controls so it stays visible on mobile -->
+    <div class="search-wrapper" id="search-wrapper-floating" style="display: none;">
+        <input type="text" id="search-box" placeholder="بحث عن اسم...">
+        <ul id="search-results"></ul>
+    </div>
+
+    <div id="right-controls">
+
+        <div id="floating-search-container">
+            <button id="search-icon-btn" class="floating-btn" data-tooltip="بحث" aria-label="بحث">
+                <svg viewBox="0 0 24 24" width="20" height="20" stroke="#4a3b32" stroke-width="2.5" fill="none"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+            </button>
+        </div>
+
+        <div class="zoom-controls">
+            <button id="controls-toggle-btn" class="floating-btn" data-tooltip="أدوات التحكم" aria-label="أدوات التحكم">
+                <svg viewBox="0 0 24 24" width="20" height="20" stroke="#4a3b32" stroke-width="2.5" fill="none"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="4" y1="6" x2="20" y2="6"></line>
+                    <line x1="8" y1="12" x2="20" y2="12"></line>
+                    <line x1="4" y1="18" x2="20" y2="18"></line>
+                    <circle cx="4" cy="6" r="2" fill="#4a3b32" stroke="none"></circle>
+                    <circle cx="14" cy="12" r="2" fill="#4a3b32" stroke="none"></circle>
+                    <circle cx="4" cy="18" r="2" fill="#4a3b32" stroke="none"></circle>
+                </svg>
+            </button>
+
+            <div id="controls-panel">
+                <button id="zoom-in-btn" class="floating-btn" data-tooltip="تكبير" aria-label="تكبير">+</button>
+                <button id="zoom-out-btn" class="floating-btn" data-tooltip="تصغير" aria-label="تصغير">-</button>
+
+                <button id="expand-btn" class="floating-btn" data-tooltip="تمديد الشجرة بالكامل" aria-label="تمديد الشجرة">
+                    <svg viewBox="0 0 24 24" width="20" height="20" stroke="#4a3b32" stroke-width="2.5" fill="none"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M15 3h6v6"></path>
+                        <path d="M9 21H3v-6"></path>
+                        <path d="M21 3l-7 7"></path>
+                        <path d="M3 21l7-7"></path>
+                    </svg>
+                </button>
+
+                <button id="collapse-btn" class="floating-btn" data-tooltip="طي الشجرة" aria-label="طي الشجرة">
+                    <svg viewBox="0 0 24 24" width="20" height="20" stroke="#4a3b32" stroke-width="2.5" fill="none"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 14h6v6"></path>
+                        <path d="M20 10h-6V4"></path>
+                        <path d="M14 10l7-7"></path>
+                        <path d="M10 14l-7 7"></path>
+                    </svg>
+                </button>
+
+                <button id="center-btn" class="floating-btn" data-tooltip="توسيط الجد الأول" aria-label="توسيط الجد الأول">
+                    <svg viewBox="0 0 24 24" width="20" height="20" stroke="#4a3b32" stroke-width="2.5" fill="none"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <button id="share-btn" class="floating-btn" data-tooltip="مشاركة" aria-label="مشاركة">
             <svg viewBox="0 0 24 24" width="20" height="20" stroke="#4a3b32" stroke-width="2.5" fill="none"
                 stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="18" cy="5" r="3"></circle>
+                <circle cx="6" cy="12" r="3"></circle>
+                <circle cx="18" cy="19" r="3"></circle>
+                <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+            </svg>
+        </button>
+
+    </div>
+
+    <!-- Mobile: tree action icons sit inside the navbar area (left side, next to hamburger) -->
+    <div id="navbar-tree-actions">
+        <button id="mobile-search-btn" class="navbar-tree-btn" aria-label="بحث">
+            <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
                 <circle cx="11" cy="11" r="8"></circle>
                 <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
             </svg>
         </button>
-
-        <div class="search-wrapper" id="search-wrapper-floating" style="display: none;">
-            <input type="text" id="search-box" placeholder="بحث عن اسم...">
-            <ul id="search-results"></ul>
-        </div>
-    </div>
-
-    <div id="floating-menu-container">
-        <button id="menu-icon-btn" class="floating-btn">
-            <svg viewBox="0 0 24 24" width="20" height="20" stroke="#4a3b32" stroke-width="2.5" fill="none"
-                stroke-linecap="round" stroke-linejoin="round">
-                <line x1="3" y1="12" x2="21" y2="12"></line>
-                <line x1="3" y1="6" x2="21" y2="6"></line>
-                <line x1="3" y1="18" x2="21" y2="18"></line>
-            </svg>
-        </button>
-
-        <div id="menu-dropdown">
-        </div>
-    </div>
-
-    <div class="zoom-controls">
-        <button id="controls-toggle-btn" class="floating-btn" title="أدوات التحكم">
-            <svg viewBox="0 0 24 24" width="20" height="20" stroke="#4a3b32" stroke-width="2.5" fill="none"
-                stroke-linecap="round" stroke-linejoin="round">
+        <button id="mobile-controls-btn" class="navbar-tree-btn" aria-label="أدوات التحكم">
+            <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
                 <line x1="4" y1="6" x2="20" y2="6"></line>
                 <line x1="8" y1="12" x2="20" y2="12"></line>
                 <line x1="4" y1="18" x2="20" y2="18"></line>
-                <circle cx="4" cy="6" r="2" fill="#4a3b32" stroke="none"></circle>
-                <circle cx="14" cy="12" r="2" fill="#4a3b32" stroke="none"></circle>
-                <circle cx="4" cy="18" r="2" fill="#4a3b32" stroke="none"></circle>
+                <circle cx="4" cy="6" r="2" fill="currentColor" stroke="none"></circle>
+                <circle cx="14" cy="12" r="2" fill="currentColor" stroke="none"></circle>
+                <circle cx="4" cy="18" r="2" fill="currentColor" stroke="none"></circle>
             </svg>
         </button>
-
-        <div id="controls-panel">
-            <button id="zoom-in-btn" class="floating-btn" title="تكبير">+</button>
-            <button id="zoom-out-btn" class="floating-btn" title="تصغير">-</button>
-
-            <button id="expand-btn" class="floating-btn" title="تمديد الشجرة بالكامل">
-                <svg viewBox="0 0 24 24" width="20" height="20" stroke="#4a3b32" stroke-width="2.5" fill="none"
-                    stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M15 3h6v6"></path>
-                    <path d="M9 21H3v-6"></path>
-                    <path d="M21 3l-7 7"></path>
-                    <path d="M3 21l7-7"></path>
-                </svg>
-            </button>
-
-            <button id="collapse-btn" class="floating-btn" title="طي الشجرة">
-                <svg viewBox="0 0 24 24" width="20" height="20" stroke="#4a3b32" stroke-width="2.5" fill="none"
-                    stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M4 14h6v6"></path>
-                    <path d="M20 10h-6V4"></path>
-                    <path d="M14 10l7-7"></path>
-                    <path d="M10 14l-7 7"></path>
-                </svg>
-            </button>
-
-            <button id="center-btn" class="floating-btn" title="توسيط الجد الأول">
-                <svg viewBox="0 0 24 24" width="20" height="20" stroke="#4a3b32" stroke-width="2.5" fill="none"
-                    stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <circle cx="12" cy="12" r="3"></circle>
-                </svg>
-            </button>
-        </div>
+        <button id="mobile-share-btn" class="navbar-tree-btn" aria-label="مشاركة">
+            <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="18" cy="5" r="3"></circle>
+                <circle cx="6" cy="12" r="3"></circle>
+                <circle cx="18" cy="19" r="3"></circle>
+                <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+            </svg>
+        </button>
     </div>
+
+    <!-- Mobile controls dropdown (slides down from navbar) -->
+    <div id="navbar-controls-dropdown">
+        <button class="floating-btn" id="m-zoom-in-btn"  aria-label="تكبير">+</button>
+        <button class="floating-btn" id="m-zoom-out-btn" aria-label="تصغير">−</button>
+        <button class="floating-btn" id="m-expand-btn"   aria-label="تمديد الشجرة">
+            <svg viewBox="0 0 24 24" width="20" height="20" stroke="#4a3b32" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M15 3h6v6"></path><path d="M9 21H3v-6"></path>
+                <path d="M21 3l-7 7"></path><path d="M3 21l7-7"></path>
+            </svg>
+        </button>
+        <button class="floating-btn" id="m-collapse-btn" aria-label="طي الشجرة">
+            <svg viewBox="0 0 24 24" width="20" height="20" stroke="#4a3b32" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 14h6v6"></path><path d="M20 10h-6V4"></path>
+                <path d="M14 10l7-7"></path><path d="M10 14l-7 7"></path>
+            </svg>
+        </button>
+        <button class="floating-btn" id="m-center-btn"   aria-label="توسيط الجد الأول">
+            <svg viewBox="0 0 24 24" width="20" height="20" stroke="#4a3b32" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <circle cx="12" cy="12" r="3"></circle>
+            </svg>
+        </button>
+    </div>
+
+    <div id="share-toast">تم نسخ الرابط!</div>
 
     <div id="tree-container"></div>
     <div id="tooltip"></div>
 
-    <footer class="bottom-footer">
-    </footer>
+    <!-- Portrait Lightbox -->
+    <div id="portrait-lightbox" role="dialog" aria-modal="true">
+        <button id="lightbox-close" aria-label="إغلاق">✕</button>
+        <img id="lightbox-img" src="" alt="">
+    </div>
 
+    <!-- Portrait loading indicator -->
+    <div id="portrait-loading">
+        <span></span><span></span><span></span>
+    </div>
+
+    <!-- Alive Portrait Popup -->
+    <div id="portrait-popup-overlay"></div>
+    <div id="portrait-popup">
+        <img id="portrait-popup-img" src="" alt="" style="display:none;">
+        <div id="portrait-popup-name"></div>
+        <button id="portrait-popup-close" aria-label="إغلاق">إغلاق</button>
+    </div>
+
+    <!-- Death Date Popup -->
+    <div id="death-popup-overlay"></div>
+    <div id="death-popup">
+        <img id="death-popup-portrait" src="" alt="" style="display:none;">
+        <div id="death-popup-name"></div>
+        <div id="death-popup-rahma">- رحمه الله وأسكنه فسيح جناته -</div>
+        <div id="death-popup-date"></div>
+        <button id="death-popup-close" aria-label="إغلاق">إغلاق</button>
+    </div>
+
+    <footer class="bottom-footer"></footer>
+
+    <script src="particles.js"></script>
     <script type="module" src="script.js"></script>
+    <script>
+        // Fallback: if module fails to load, show error after timeout
+        setTimeout(function() {
+            if (!document.querySelector('#tree-container svg')) {
+                document.getElementById('tree-container').innerHTML = '<p style="text-align:center;color:#a33;font-size:18px;padding:40px;direction:rtl;">تعذّر تحميل البيانات. يرجى تحديث الصفحة.</p>';
+            }
+        }, 5000);
+    </script>
     <script src="menu.js"></script>
     <script>
         (function () {
@@ -129,7 +540,6 @@
                 toggleBtn.classList.toggle('active', isOpen);
             });
 
-            // Close panel when clicking outside
             document.addEventListener('click', function (e) {
                 if (!toggleBtn.contains(e.target) && !panel.contains(e.target)) {
                     panel.classList.remove('open');
@@ -138,11 +548,197 @@
             });
         })();
 
-        // In script.js or a <script> in tree.html
         document.fonts.ready.then(() => {
             document.getElementById('lineage-text').style.opacity = '1';
         });
 
+        // ── Share Button (desktop) ──
+        (function () {
+            const shareBtn = document.getElementById("share-btn");
+            const toast = document.getElementById("share-toast");
+            let toastTimer;
+            function showToast(msg) {
+                toast.textContent = msg;
+                toast.classList.add("show");
+                clearTimeout(toastTimer);
+                toastTimer = setTimeout(() => toast.classList.remove("show"), 2500);
+            }
+            shareBtn.addEventListener("click", async function (e) {
+                e.stopPropagation();
+                const shareData = { title: document.title, url: window.location.href };
+                if (navigator.share) {
+                    try { await navigator.share(shareData); } catch (_) { }
+                } else {
+                    try {
+                        await navigator.clipboard.writeText(window.location.href);
+                        showToast("تم نسخ الرابط!");
+                    } catch (_) {
+                        const ta = document.createElement("textarea");
+                        ta.value = window.location.href;
+                        ta.style.position = "fixed"; ta.style.opacity = "0";
+                        document.body.appendChild(ta);
+                        ta.select(); document.execCommand("copy");
+                        document.body.removeChild(ta);
+                        showToast("تم نسخ الرابط!");
+                    }
+                }
+            });
+        })();
+
+        // ── Mobile Navbar Tree Actions ──
+        (function () {
+            const toast        = document.getElementById("share-toast");
+            const mSearchBtn   = document.getElementById("mobile-search-btn");
+            const mCtrlBtn     = document.getElementById("mobile-controls-btn");
+            const mShareBtn    = document.getElementById("mobile-share-btn");
+            const searchWrapper = document.getElementById("search-wrapper-floating");
+            const searchBox    = document.getElementById("search-box");
+            const ctrlDrop     = document.getElementById("navbar-controls-dropdown");
+
+            // Search toggle
+            mSearchBtn.addEventListener("click", function (e) {
+                e.stopPropagation();
+                const isVisible = searchWrapper.style.display === "block";
+                searchWrapper.style.display = isVisible ? "none" : "block";
+                if (!isVisible) { searchBox.focus(); }
+                mSearchBtn.classList.toggle("active", !isVisible);
+                ctrlDrop.classList.remove("open");
+                mCtrlBtn.classList.remove("active");
+            });
+
+            // Controls dropdown toggle
+            mCtrlBtn.addEventListener("click", function (e) {
+                e.stopPropagation();
+                const isOpen = ctrlDrop.classList.toggle("open");
+                mCtrlBtn.classList.toggle("active", isOpen);
+                searchWrapper.style.display = "none";
+                mSearchBtn.classList.remove("active");
+            });
+
+            // Proxy control buttons → desktop hidden buttons
+            const proxyMap = {
+                "m-zoom-in-btn":  "zoom-in-btn",
+                "m-zoom-out-btn": "zoom-out-btn",
+                "m-expand-btn":   "expand-btn",
+                "m-collapse-btn": "collapse-btn",
+                "m-center-btn":   "center-btn"
+            };
+            Object.entries(proxyMap).forEach(([mId, dId]) => {
+                document.getElementById(mId).addEventListener("click", function (e) {
+                    e.stopPropagation();
+                    document.getElementById(dId).click();
+                });
+            });
+
+            // Share
+            let toastTimer;
+            function showToast(msg) {
+                toast.textContent = msg;
+                toast.classList.add("show");
+                clearTimeout(toastTimer);
+                toastTimer = setTimeout(() => toast.classList.remove("show"), 2500);
+            }
+            mShareBtn.addEventListener("click", async function (e) {
+                e.stopPropagation();
+                const shareData = { title: document.title, url: window.location.href };
+                if (navigator.share) {
+                    try { await navigator.share(shareData); } catch (_) { }
+                } else {
+                    try {
+                        await navigator.clipboard.writeText(window.location.href);
+                        showToast("تم نسخ الرابط!");
+                    } catch (_) {
+                        const ta = document.createElement("textarea");
+                        ta.value = window.location.href;
+                        ta.style.position = "fixed"; ta.style.opacity = "0";
+                        document.body.appendChild(ta);
+                        ta.select(); document.execCommand("copy");
+                        document.body.removeChild(ta);
+                        showToast("تم نسخ الرابط!");
+                    }
+                }
+            });
+
+            // Close on outside tap
+            document.addEventListener("click", function (e) {
+                if (!ctrlDrop.contains(e.target) && !mCtrlBtn.contains(e.target)) {
+                    ctrlDrop.classList.remove("open");
+                    mCtrlBtn.classList.remove("active");
+                }
+                if (!searchWrapper.contains(e.target) && !mSearchBtn.contains(e.target)) {
+                    searchWrapper.style.display = "none";
+                    mSearchBtn.classList.remove("active");
+                }
+            });
+        })();
+    </script>
+
+    <!-- Instant tooltips for floating buttons -->
+    <script>
+        (function () {
+            const GAP = 8;
+            let tip = null;
+
+            function getTip() {
+                if (!tip) {
+                    tip = document.createElement('div');
+                    tip.className = 'btn-tooltip';
+                    document.body.appendChild(tip);
+                }
+                return tip;
+            }
+
+            function show(btn) {
+                const text = btn.getAttribute('data-tooltip');
+                if (!text) return;
+
+                const t = getTip();
+                t.textContent = text;
+                t.classList.remove('visible');
+
+                // Measure
+                t.style.left = '0'; t.style.top = '0';
+                const tRect = t.getBoundingClientRect();
+                const bRect = btn.getBoundingClientRect();
+
+                // Prefer placing to the right of the button
+                let left = bRect.right + GAP;
+                let top = bRect.top + (bRect.height - tRect.height) / 2;
+
+                // If it overflows the right edge, place to the left
+                if (left + tRect.width > window.innerWidth - 4) {
+                    left = bRect.left - tRect.width - GAP;
+                }
+
+                // Keep within vertical bounds
+                if (top < 4) top = 4;
+                if (top + tRect.height > window.innerHeight - 4) {
+                    top = window.innerHeight - tRect.height - 4;
+                }
+
+                t.style.left = left + 'px';
+                t.style.top = top + 'px';
+                requestAnimationFrame(() => t.classList.add('visible'));
+            }
+
+            function hide() {
+                if (tip) tip.classList.remove('visible');
+            }
+
+            document.addEventListener('pointerenter', function (e) {
+                const btn = e.target.closest('.floating-btn[data-tooltip]');
+                if (btn) show(btn);
+            }, true);
+
+            document.addEventListener('pointerleave', function (e) {
+                if (e.target.closest('.floating-btn[data-tooltip]')) hide();
+            }, true);
+
+            // Hide on click too (tooltip shouldn't linger after action)
+            document.addEventListener('click', function (e) {
+                if (e.target.closest('.floating-btn')) hide();
+            }, true);
+        })();
     </script>
 </body>
 

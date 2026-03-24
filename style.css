@@ -1,29 +1,528 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Reem+Kufi+Ink:wght@400;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@100..900&display=swap');
+/* =========================================
+   Design Tokens (Custom Properties)
+   ========================================= */
+:root {
+    --color-bg: #f4efdf;
+    --color-text: #4a3b32;
+    --color-text-light: #6a5646;
+    --color-accent: #8b7355;
+    --color-dark: #4a3b32;
+    --color-cream: #f4efdf;
+    --color-border: rgba(139, 115, 85, 0.3);
+    --color-border-strong: rgba(139, 115, 85, 0.4);
+    --font-body: 'Noto Naskh Arabic', sans-serif;
+    --font-heading: 'Noto Kufi Arabic', sans-serif;
+    --font-display: 'Reem Kufi Ink', sans-serif;
+    --radius-sm: 8px;
+    --radius-md: 10px;
+    --radius-lg: 15px;
+    --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.05);
+    --noise-bg: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+    --arabesque-bg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cg fill='none' stroke='%238b7355' opacity='0.18'%3E%3Ccircle cx='50' cy='50' r='28' stroke-width='0.6'/%3E%3Ccircle cx='50' cy='50' r='18' stroke-width='0.4'/%3E%3Cpath d='M50 22 Q60 36 50 50 Q40 36 50 22Z' stroke-width='0.6' fill='%238b7355' fill-opacity='0.03'/%3E%3Cpath d='M50 78 Q60 64 50 50 Q40 64 50 78Z' stroke-width='0.6' fill='%238b7355' fill-opacity='0.03'/%3E%3Cpath d='M22 50 Q36 40 50 50 Q36 60 22 50Z' stroke-width='0.6' fill='%238b7355' fill-opacity='0.03'/%3E%3Cpath d='M78 50 Q64 40 50 50 Q64 60 78 50Z' stroke-width='0.6' fill='%238b7355' fill-opacity='0.03'/%3E%3Crect x='32' y='32' width='36' height='36' rx='2' transform='rotate(45 50 50)' stroke-width='0.5'/%3E%3Cpath d='M50 0 L50 22 M50 78 L50 100 M0 50 L22 50 M78 50 L100 50' stroke-width='0.3' opacity='0.5'/%3E%3C/g%3E%3C/svg%3E");
+}
 
+/* =========================================
+   Base Styles
+   ========================================= */
 body {
-    font-family: 'Noto Naskh Arabic', sans-serif;
+    font-family: var(--font-body);
     direction: rtl;
-    background-color: #f4efdf;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+    background-color: var(--color-bg);
+    background-image:
+        var(--noise-bg),
+        var(--arabesque-bg),
+        radial-gradient(ellipse at center, transparent 50%, rgba(74, 59, 50, 0.08) 100%),
+        radial-gradient(ellipse at 50% 30%, rgba(255,255,255,0.45) 0%, transparent 70%),
+        radial-gradient(ellipse at 50% 100%, rgba(139,115,85,0.06) 0%, transparent 60%);
+    background-attachment: scroll, scroll, fixed, scroll, scroll;
+    color: var(--color-text);
     margin: 0;
     display: flex;
     flex-direction: column;
-    height: 100vh;
-    overflow: hidden;
+    min-height: 100vh;
+    min-height: 100dvh;
+    overflow-y: auto;
 }
 
-/* 1. الترويسة العلوية (الهيدر) */
+/* Tree page: fixed-height, no scroll */
+body.tree-page {
+    height: 100vh;
+    height: 100dvh;
+    min-height: 0;
+    overflow: hidden;
+    box-sizing: border-box; /* padding-top is included in 100vh, not added on top */
+}
+
+/* Tree page: simpler background (pattern can interfere with SVG tree) */
+body.tree-page {
+    background-attachment: scroll;
+}
+
+/* Intro page: centered */
+body.intro-page {
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 40px 20px;
+    box-sizing: border-box;
+}
+
+/* =========================================
+   Shared Content Page Layout
+   ========================================= */
+.header {
+    text-align: center;
+    padding: 30px 20px 0;
+}
+
+.header img {
+    max-height: 350px;
+    width: auto;
+}
+
+.content-container {
+    max-width: 800px;
+    width: 85%;
+    margin: 40px auto 40px;
+    padding: 40px;
+    background: rgba(255, 255, 255, 0.55);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    flex-grow: 1;
+}
+
+.content-container h2 {
+    font-family: var(--font-heading);
+    color: var(--color-accent);
+    font-size: 22px;
+    border-bottom: none;
+    padding-bottom: 8px;
+    margin-top: 30px;
+    text-align: right;
+}
+
+.content-container h2:first-of-type {
+    margin-top: 0;
+}
+
+.content-container p {
+    font-size: 18px;
+    line-height: 2;
+    text-align: justify;
+    margin-bottom: 15px;
+}
+
+.page-title {
+    font-family: var(--font-heading);
+    font-size: 26px;
+    color: var(--color-text);
+    text-align: center;
+    margin: 0 auto 25px;
+    padding-bottom: 20px;
+    border-bottom: none;
+    line-height: 1.6;
+    max-width: 600px;
+    position: relative;
+}
+
+.page-title::after {
+    content: none;
+}
+
+/* ── Back Button ── */
+.back-btn-container {
+    text-align: center;
+    margin-top: 40px;
+}
+
+.back-btn {
+    font-family: var(--font-heading);
+    display: inline-block;
+    background: var(--color-dark);
+    color: var(--color-cream);
+    text-decoration: none;
+    padding: 12px 30px;
+    border-radius: var(--radius-sm);
+    font-weight: bold;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow-sm);
+}
+
+.back-btn:hover {
+    background: var(--color-text-light);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* ── Content Pages Responsive ── */
+@media (max-width: 768px) {
+    .content-container {
+        margin: 15px auto;
+        padding: 25px;
+        width: 90%;
+    }
+
+    .header img {
+        max-height: 200px;
+    }
+
+    .page-title {
+        font-size: 20px;
+    }
+}
+
+/* =========================================
+   Footer (shared)
+   ========================================= */
+.bottom-footer {
+    flex-shrink: 0;
+    z-index: 1000;
+    box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    padding: 0;
+    margin-top: auto;
+}
+
+.footer-legend {
+    background: var(--color-bg);
+    color: #2c1a0e;
+    font-family: var(--font-heading);
+    font-size: 12px;
+    font-weight: bold;
+    padding: 7px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    border-top: 1px solid rgba(139, 115, 85, 0.25);
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.legend-swatch {
+    display: inline-block;
+    width: 26px;
+    height: 16px;
+    border-radius: 4px;
+    flex-shrink: 0;
+}
+
+.footer-credit {
+    background: var(--color-dark);
+    color: var(--color-cream);
+    font-family: var(--font-heading);
+    font-size: 12px;
+    font-weight: bold;
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+
+.footer-whatsapp {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-cream);
+    opacity: 0.85;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    text-decoration: none;
+    line-height: 1;
+}
+
+.footer-whatsapp:hover {
+    opacity: 1;
+    transform: scale(1.15);
+}
+
+@media (max-width: 480px) {
+    .footer-legend {
+        font-size: 10px;
+        gap: 12px;
+        padding: 6px 10px;
+    }
+
+    .legend-swatch {
+        width: 20px;
+        height: 13px;
+    }
+}
+
+/* =========================================
+   Top Navigation Bar
+   ========================================= */
+#top-navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1001;
+    height: 76px;
+    background: rgba(244, 239, 223, 0.92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--color-border);
+    box-shadow: 0 2px 12px rgba(74, 59, 50, 0.08);
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    padding: 0 24px;
+    box-sizing: border-box;
+    direction: rtl;
+}
+
+/* Logo: first (rightmost in RTL) column */
+#top-navbar > a:first-child {
+    justify-self: start;
+}
+
+#navbar-logo {
+    height: 60px;
+    width: auto;
+    display: block;
+}
+
+/* Links: center column */
+#navbar-links {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    justify-self: center;
+}
+
+.nav-link {
+    font-family: var(--font-heading);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--color-text);
+    text-decoration: none;
+    padding: 8px 16px;
+    border-radius: var(--radius-sm);
+    transition: background 0.2s ease, color 0.2s ease;
+    white-space: nowrap;
+    position: relative;
+}
+
+.nav-link:hover {
+    background: rgba(139, 115, 85, 0.1);
+    color: var(--color-accent);
+}
+
+.nav-link.active {
+    background: rgba(139, 115, 85, 0.12);
+    color: var(--color-accent);
+}
+
+.nav-link.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    right: 20%;
+    left: 20%;
+    height: 2px;
+    background: var(--color-accent);
+    border-radius: 2px;
+}
+
+/* Hamburger toggle (mobile only) */
+#navbar-toggle {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    color: var(--color-text);
+    justify-self: end;
+}
+
+#navbar-toggle svg {
+    width: 22px;
+    height: 22px;
+    display: block;
+}
+
+/* Mobile dropdown */
+#navbar-mobile-menu {
+    display: none;
+    position: fixed;
+    top: 76px;
+    left: 0;
+    right: 0;
+    z-index: 9999;
+    background: rgba(244, 239, 223, 0.97);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--color-border);
+    box-shadow: 0 8px 24px rgba(74, 59, 50, 0.12);
+    flex-direction: column;
+    padding: 8px 0;
+    opacity: 0;
+    transform: translateY(-8px);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+#navbar-mobile-menu.open {
+    display: flex;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+#navbar-mobile-menu .nav-link {
+    padding: 14px 24px;
+    font-size: 15px;
+    border-radius: 0;
+    text-align: right;
+    border-bottom: 1px solid rgba(139, 115, 85, 0.1);
+}
+
+#navbar-mobile-menu .nav-link:last-child {
+    border-bottom: none;
+}
+
+#navbar-mobile-menu .nav-link:hover {
+    background: rgba(139, 115, 85, 0.08);
+}
+
+#navbar-mobile-menu .nav-link.active {
+    background: rgba(139, 115, 85, 0.08);
+    text-decoration: underline;
+    text-decoration-color: var(--color-accent);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 4px;
+}
+
+/* Hide the desktop underline bar in mobile menu */
+#navbar-mobile-menu .nav-link.active::after {
+    display: none;
+}
+
+/* Push page content below the fixed nav */
+body {
+    padding-top: 76px;
+}
+
+/* Intro page has no navbar — remove padding */
+body.intro-page {
+    padding-top: 0;
+}
+
+/* Tree page: shift header overlay down */
+body.tree-page {
+    padding-top: 76px;
+}
+
+@media (max-width: 768px) {
+    #navbar-links {
+        display: none;
+    }
+
+    #navbar-toggle {
+        display: block;
+        grid-column: 3;
+    }
+
+    #top-navbar {
+        padding: 0 16px;
+    }
+
+    /* Prevent wide horizontal logo from overflowing into the center/left */
+    #navbar-logo {
+        max-width: 42vw;
+        height: auto;
+        max-height: 52px;
+    }
+}
+
+/* Legacy floating-menu support — hide on pages with navbar */
+#floating-menu-container {
+    display: none;
+}
+
+/* =========================================
+   Floating Button (shared)
+   ========================================= */
+.floating-btn {
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid var(--color-border-strong);
+    color: var(--color-text);
+    font-size: 28px;
+    font-weight: bold;
+    width: 45px;
+    height: 45px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.2s ease;
+    padding: 0;
+    line-height: 1;
+    touch-action: manipulation;
+    user-select: none;
+}
+
+.floating-btn:hover {
+    background: #ffffff;
+    transform: scale(1.1);
+    box-shadow: 0 6px 12px rgba(139, 115, 85, 0.2);
+}
+
+/* Instant custom tooltip (JS-managed, appended to body to avoid clipping) */
+.btn-tooltip {
+    position: fixed;
+    background: var(--color-dark);
+    color: var(--color-cream);
+    font-size: 12px;
+    font-weight: 600;
+    font-family: var(--font-body);
+    padding: 5px 10px;
+    border-radius: var(--radius-sm);
+    white-space: nowrap;
+    pointer-events: none;
+    z-index: 10000;
+    opacity: 0;
+    transform: scale(0.95);
+    transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+.btn-tooltip.visible {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.floating-btn svg {
+    width: 20px !important;
+    height: 20px !important;
+    pointer-events: none;
+}
+
+/* =========================================
+   Tree Page: Top Header
+   ========================================= */
 .top-header {
     text-align: center;
     padding: 15px;
     background: rgba(244, 239, 223, 0.85);
     backdrop-filter: blur(8px);
-    border-bottom: 1px solid rgba(139, 115, 85, 0.3);
+    border-bottom: 1px solid var(--color-border);
     flex-shrink: 0;
     z-index: 1000;
     overflow: hidden;
+    width: 100%;
+    pointer-events: auto;
 }
 
 .top-header.hidden {
@@ -41,12 +540,12 @@ body {
 
 .top-header h1 {
     margin: 0;
-    font-family: 'Reem Kufi Ink', sans-serif;
+    font-family: var(--font-display);
     font-size: 35px;
-    color: #4a3b32;
+    color: var(--color-text);
 }
 
-/* 2. شريط الأدوات الثابت (Nav Bar) */
+/* Nav Bar */
 .nav-bar {
     display: flex;
     justify-content: center;
@@ -58,17 +557,18 @@ body {
     z-index: 999;
     flex-shrink: 0;
     flex-wrap: wrap;
+    pointer-events: auto;
 }
 
 .nav-bar button, .nav-bar a, .nav-bar input {
     background: rgba(255, 255, 255, 0.7);
-    border: 1px solid rgba(139, 115, 85, 0.4);
-    color: #4a3b32;
-    font-family: 'Noto Naskh Arabic', sans-serif;
+    border: 1px solid var(--color-border-strong);
+    color: var(--color-text);
+    font-family: var(--font-body);
     font-size: 14px;
     font-weight: bold;
     padding: 8px 16px;
-    border-radius: 8px;
+    border-radius: var(--radius-sm);
     cursor: pointer;
     transition: all 0.3s ease;
     text-decoration: none;
@@ -81,17 +581,33 @@ body {
     transform: translateY(-2px);
 }
 
-.search-wrapper {
-    position: relative;
+/* =========================================
+   Tree Page: UI Wrapper Overlay
+   ========================================= */
+#ui-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
     display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 1000;
+    transition: opacity 0.4s ease, transform 0.4s ease, visibility 0.4s;
+    transition-delay: 0.1s;
+    pointer-events: none;
 }
 
-.search-wrapper input {
-    width: 220px;
-    text-align: right;
-    cursor: text;
+#ui-wrapper.hidden {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-20px);
+    transition-delay: 0s;
 }
 
+/* =========================================
+   Tree Page: D3 Nodes & Links
+   ========================================= */
 .node {
     filter: drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.3));
     transition: filter 0.2s ease;
@@ -102,29 +618,25 @@ body {
     cursor: pointer;
 }
 
-/* 1. Add this transition to your existing base node rect to make the color fade smoothly */
 .node rect {
     fill: #ffffff;
     stroke: #2c3e50;
     stroke-width: 3px;
-    transition: fill 0.4s ease, stroke 0.4s ease; /* This makes the flash smooth */
+    transition: fill 0.4s ease, stroke 0.4s ease;
 }
 
-/* 2. Replace your existing highlight classes with these new colors */
 .node rect.highlight {
-    fill: #060606 !important; /* A bright golden yellow */
-    stroke: #070707 !important; /* A deep orange/red border */
+    fill: #060606 !important;
+    stroke: #070707 !important;
 }
 
 .node text.highlight {
-    fill: #fbf9f9 !important; /* Matches the text to the border */
+    fill: #fbf9f9 !important;
 }
 
 .node text {
-    font-family: 'Noto Naskh Arabic', sans-serif;
+    font-family: var(--font-body);
 }
-
-
 
 .link {
     fill: none;
@@ -147,57 +659,24 @@ body {
     position: relative;
 }
 
-/* 4. الفوتر السفلي الثابت */
-.bottom-footer {
-    text-align: center;
-    padding: 12px;
-    background: #4a3b32;
-    color: #f4efdf;
-    font-family: 'Noto Kufi Arabic', sans-serif;
-    font-size: 12px;
-    font-weight: bold;
-    flex-shrink: 0;
-    z-index: 1000;
-    box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-}
-
-.footer-whatsapp {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #f4efdf;
-    opacity: 0.85;
-    transition: opacity 0.2s ease, transform 0.2s ease;
-    text-decoration: none;
-    line-height: 1;
-}
-
-.footer-whatsapp:hover {
-    opacity: 1;
-    transform: scale(1.15);
-}
-
-
-/* Tooltip Styles */
+/* =========================================
+   Tree Page: Tooltip
+   ========================================= */
 #tooltip {
     position: absolute;
     text-align: center;
     padding: 8px 12px;
-    font-family: 'Noto Naskh Arabic', sans-serif;
+    font-family: var(--font-body);
     font-size: 14px;
     font-weight: bold;
     color: #fff;
     background: rgba(0, 0, 0, 0.8);
     border: 1px solid #ddd;
-    border-radius: 8px;
+    border-radius: var(--radius-sm);
     pointer-events: none;
     opacity: 0;
     direction: rtl;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     z-index: 2000;
     width: 250px;
     white-space: normal;
@@ -205,18 +684,20 @@ body {
     line-height: 1.6;
 }
 
-/* Input Box */
+/* =========================================
+   Tree Page: Search
+   ========================================= */
 .search-container input[type="text"] {
     background: rgba(255, 255, 255, 0.35);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
-    border: 1px solid rgba(139, 115, 85, 0.4);
-    color: #4a3b32;
-    font-family: 'Noto Naskh Arabic', sans-serif;
+    border: 1px solid var(--color-border-strong);
+    color: var(--color-text);
+    font-family: var(--font-body);
     font-size: 14px;
     font-weight: bold;
     padding: 10px 16px;
-    border-radius: 8px;
+    border-radius: var(--radius-sm);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
     transition: all 0.3s ease;
     outline: none;
@@ -227,180 +708,30 @@ body {
     text-align: right;
 }
 
-/* Search Results Container */
-ul#search-results {
-    top: 100%;
-    right: 0;
-    position: absolute;
-    width: 100%;
-    margin-top: 5px;
-    font-family: 'Noto Naskh Arabic', sans-serif;
-    list-style-type: none;
-    padding: 0;
-    display: none;
-    z-index: 1000;
-    background: rgba(244, 239, 223, 0.9) !important;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(139, 115, 85, 0.3) !important;
-    border-radius: 8px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-    left: 25%;
-}
-
-ul#search-results li {
-    padding: 10px;
-    cursor: pointer;
-    direction: rtl;
-    border-bottom: 1px solid rgba(139, 115, 85, 0.3);
-    text-align: right;
-}
-
-ul#search-results li:hover {
-    background: rgba(255, 255, 255, 0.5) !important;
-}
-
-#search-box:focus {
-    background: rgba(255, 255, 255, 0.85);
-    border: 2px solid #8b7355;
-    box-shadow: 0 0 10px rgba(139, 115, 85, 0.3);
-    outline: none;
-}
-
-@media (max-width: 600px) {
-    .search-container {
-        margin-top: 240px;
-    }
-
-    .search-container input[type="text"] {
-        width: 70%;
-        font-size: 14px;
-        padding: 8px;
-    }
-
-    ul#search-results {
-        width: 80%;
-        left: 10%;
-    }
-
-    .top-header {
-        padding: 10px 5px;
-    }
-    
-    .top-header img {
-        max-height: 180px;
-        margin-bottom: 5px;
-    }
-
-
-
-
-}
-
 /* =========================================
-   UI Overlay & Floating Buttons Styling
-========================================= */
-
-/* Wrap the logo and nav to float them over the tree */
-#ui-wrapper {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    z-index: 1000;
-    /* Added opacity fade and a smoother easing curve */
-transition: opacity 0.4s ease, transform 0.4s ease, visibility 0.4s;
-    transition-delay: 0.1s; /* Adds a tiny buffer to ignore accidental scroll bounces */
-    pointer-events: none;
-}
-
-#ui-wrapper.hidden {
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(-20px);
-    transition-delay: 0s; /* Hide immediately when scrolling down */
-}
-
-.top-header, .nav-bar {
-    pointer-events: auto; /* Re-enables clicking on the actual buttons/logo */
-}
-
-.top-header {
-    width: 100%;
-}
-
-/* Floating Zoom Controls */
-/* Floating Controls Container */
-
-/* Universal Floating Button Style */
-.floating-btn {
-    background: rgba(255, 255, 255, 0.9);
-    border: 1px solid rgba(139, 115, 85, 0.4);
-    color: #4a3b32;
-    font-size: 28px;
-    font-weight: bold;
-    width: 45px;
-    height: 45px;
-    border-radius: 8px;
-    cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: all 0.2s ease;
-    padding: 0;
-    line-height: 1;
-    touch-action: manipulation;
-    user-select: none;
-}
-
-.floating-btn:hover {
-    background: #ffffff;
-    transform: scale(1.1);
-    box-shadow: 0 6px 12px rgba(139, 115, 85, 0.2);
-}
-
-/* Isolated Search Container */
-#floating-search-container {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    z-index: 1001;
-    display: flex;
-    justify-content: flex-end;
-    height: 45px;
-    /* display: none; */
-}
-
-/* Isolated Zoom Container */
-.zoom-controls {
-    position: absolute;
-    /* This 75px pushes the zoom buttons strictly below the search area, making overlap mathematically impossible */
-    top: 75px; 
+   Tree Page: Right-Side Control Column
+   ========================================= */
+#right-controls {
+    position: fixed;
+    top: 96px; /* 76px navbar + 20px gap */
     right: 20px;
     display: flex;
     flex-direction: column;
     gap: 10px;
-    z-index: 1000;
+    z-index: 1001;
 }
 
-.zoom-controls button:hover {
-    background: #ffffff;
-    transform: scale(1.1);
-    box-shadow: 0 6px 12px rgba(139, 115, 85, 0.2);
+#floating-search-container {
+    position: relative;
+    display: flex;
+    height: 45px;
 }
-
-
 
 .search-wrapper {
     position: absolute;
     top: 0;
     right: 0;
-    width: 250px; /* How far it expands to the left */
+    width: min(250px, calc(100vw - 80px));
     z-index: 1001;
 }
 
@@ -411,35 +742,42 @@ transition: opacity 0.4s ease, transform 0.4s ease, visibility 0.4s;
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
-    border: 2px solid #8b7355;
-    color: #4a3b32;
-    font-family: 'Noto Naskh Arabic', sans-serif;
+    border: 2px solid var(--color-accent);
+    color: var(--color-text);
+    font-family: var(--font-body);
     font-size: 14px;
     font-weight: bold;
     padding: 0 15px;
-    border-radius: 8px;
+    border-radius: var(--radius-sm);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     outline: none;
     direction: rtl;
     text-align: right;
 }
 
-/* Search Results Dropdown */
+#search-box:focus {
+    background: rgba(255, 255, 255, 0.85);
+    border: 2px solid var(--color-accent);
+    box-shadow: 0 0 10px rgba(139, 115, 85, 0.3);
+    outline: none;
+}
+
 ul#search-results {
     top: 50px;
     right: 0;
+    left: auto;
     position: absolute;
     width: 100%;
     margin: 0;
-    font-family: 'Noto Naskh Arabic', sans-serif;
+    font-family: var(--font-body);
     list-style-type: none;
     padding: 0;
     display: none;
     background: rgba(244, 239, 223, 0.95);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(139, 115, 85, 0.4);
-    border-radius: 8px;
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-sm);
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
     overflow: hidden;
 }
@@ -457,79 +795,24 @@ ul#search-results li:hover {
     background: rgba(255, 255, 255, 0.6);
 }
 
-.floating-btn svg {
-    width: 20px !important;
-    height: 20px !important;
-    pointer-events: none; /* Stops the SVG itself from capturing clicks */
-}
-
-/* Floating Menu Container */
-#floating-menu-container {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    z-index: 1001;
-}
-
-/* Menu Dropdown Styling with Transition */
-#menu-dropdown {
-    position: absolute;
-    top: 100%; /* Positions it right below the button */
-    left: 0;   /* Aligns it to the left edge so the button doesn't move */
-    margin-top: 10px;
-    background: rgba(244, 239, 223, 0.95);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(139, 115, 85, 0.4);
-    border-radius: 8px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
-    overflow: hidden;
+/* =========================================
+   Tree Page: Zoom Controls
+   ========================================= */
+.zoom-controls {
     display: flex;
     flex-direction: column;
-    min-width: 160px;
-    
-    /* Animation properties */
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(-10px);
-    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
+    gap: 10px;
 }
 
-/* The class added by JavaScript to show the menu */
-#menu-dropdown.show {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
+.zoom-controls button:hover {
+    background: #ffffff;
+    transform: scale(1.1);
+    box-shadow: 0 6px 12px rgba(139, 115, 85, 0.2);
 }
 
-/* Individual Menu Items */
-.menu-item {
-    background: transparent;
-    border: none;
-    border-bottom: 1px solid rgba(139, 115, 85, 0.2);
-    color: #4a3b32;
-    font-family: 'Noto Naskh Arabic', sans-serif;
-    font-size: 14px;
-    font-weight: bold;
-    padding: 12px 15px;
-    cursor: pointer;
-    text-align: right;
-    text-decoration: none;
-    width: 100%;
-    box-sizing: border-box;
-    display: block;
-    outline: none;
-}
-
-.menu-item:last-child {
-    border-bottom: none;
-}
-
-.menu-item:hover {
-    background: rgba(255, 255, 255, 0.6);
-}
-
-/* Controls Toggle Panel */
+/* =========================================
+   Tree Page: Controls Toggle Panel
+   ========================================= */
 #controls-panel {
     display: flex;
     flex-direction: column;
@@ -551,47 +834,185 @@ ul#search-results li:hover {
     pointer-events: auto;
 }
 
-/* Stagger children buttons when opening */
 #controls-panel.open .floating-btn:nth-child(1) { transition-delay: 0.04s; }
 #controls-panel.open .floating-btn:nth-child(2) { transition-delay: 0.08s; }
 #controls-panel.open .floating-btn:nth-child(3) { transition-delay: 0.12s; }
 #controls-panel.open .floating-btn:nth-child(4) { transition-delay: 0.16s; }
 #controls-panel.open .floating-btn:nth-child(5) { transition-delay: 0.20s; }
+#controls-panel.open .floating-btn:nth-child(6) { transition-delay: 0.24s; }
 
-/* Active state for the toggle button */
 #controls-toggle-btn.active {
     background: rgba(139, 115, 85, 0.18);
     border-color: rgba(139, 115, 85, 0.7);
     box-shadow: 0 4px 12px rgba(139, 115, 85, 0.25);
 }
 
-@media (max-width: 600px) {
-    .search-wrapper {
-        width: 210px; /* Slightly smaller on mobile screens */
+/* Desktop: hide toggle, keep controls always open */
+@media (min-width: 769px) {
+    #controls-toggle-btn {
+        display: none;
+    }
+
+    #controls-panel {
+        max-height: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+        pointer-events: auto !important;
+        overflow: visible !important;
+        transition: none !important;
     }
 }
 
 /* =========================================
-   Fixed Header Overlay: Logo + Lineage Text
-   - Sits fixed at top-center of the viewport
-   - Never moves or scales with the tree
-   - Fades out when scrolling down, returns at top
-========================================= */
+   Tree Page: Share Button & Toast
+   ========================================= */
+#share-btn {
+    /* flows naturally at the bottom of #right-controls */
+}
 
-#header-overlay {
+#share-toast {
+    position: fixed;
+    bottom: 60px;
+    left: 50%;
+    transform: translateX(-50%) translateY(10px);
+    background: var(--color-dark);
+    color: var(--color-cream);
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: bold;
+    padding: 10px 22px;
+    border-radius: var(--radius-md);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
+    z-index: 3000;
+    white-space: nowrap;
+}
+
+#share-toast.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* =========================================
+   Mobile: Navbar Tree Action Icons
+   ========================================= */
+#navbar-tree-actions {
+    display: none; /* shown only on mobile */
     position: fixed;
     top: 0;
+    left: 56px; /* start after the hamburger button */
+    height: 76px;
+    z-index: 1002;
+    align-items: center;
+    padding: 0 4px;
+    gap: 2px;
+    pointer-events: none; /* container is invisible to clicks */
+}
+
+#navbar-tree-actions .navbar-tree-btn {
+    pointer-events: auto; /* only the buttons themselves are clickable */
+}
+
+.navbar-tree-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--color-text);
+    width: 38px;
+    height: 38px;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease, color 0.2s ease;
+    touch-action: manipulation;
+}
+
+.navbar-tree-btn:active,
+.navbar-tree-btn.active {
+    background: rgba(139, 115, 85, 0.12);
+    color: var(--color-accent);
+}
+
+/* Controls dropdown slides down from below the navbar */
+#navbar-controls-dropdown {
+    display: flex;
+    position: fixed;
+    top: 76px;
+    left: 0;
+    right: 0;
+    background: rgba(244, 239, 223, 0.97);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--color-border);
+    box-shadow: 0 4px 16px rgba(74, 59, 50, 0.1);
+    z-index: 1001;
+    padding: 12px 16px;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    visibility: hidden;
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(-8px);
+    transition: opacity 0.25s ease, transform 0.25s ease, visibility 0s linear 0.25s;
+}
+
+#navbar-controls-dropdown.open {
+    visibility: visible;
+    pointer-events: auto;
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.25s ease, transform 0.25s ease, visibility 0s linear 0s;
+}
+
+/* ── Tree page mobile overrides (must come after all tree CSS) ── */
+@media (max-width: 768px) {
+    /* Hide desktop right-controls column */
+    #right-controls {
+        display: none;
+    }
+
+    /* Show navbar tree icons */
+    #navbar-tree-actions {
+        display: flex;
+    }
+
+    /* Search wrapper drops down just below the navbar */
+    .search-wrapper {
+        position: fixed;
+        top: 84px;
+        right: 16px;
+        left: 16px;
+        width: auto;
+        bottom: auto;
+    }
+
+    /* 16px minimum prevents iOS/Android from auto-zooming on input focus */
+    .search-wrapper input {
+        font-size: 16px;
+    }
+}
+
+/* =========================================
+   Tree Page: Header Overlay (Logo + Lineage)
+   ========================================= */
+#header-overlay {
+    position: fixed;
+    top: 76px;
     left: 50%;
     transform: translateX(-50%);
-    z-index: 900; /* Below floating buttons (1001) but above tree */
+    z-index: 900;
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 14px 24px 10px;
-    pointer-events: none; /* Lets clicks pass through to the tree */
-    width: 100%;        /* ADD THIS */
-
-    /* Smooth show/hide transition */
+    pointer-events: none;
+    width: 100%;
     opacity: 1;
     visibility: visible;
     transition: opacity 0.4s ease, transform 0.4s ease, visibility 0.4s;
@@ -609,14 +1030,14 @@ ul#search-results li:hover {
     max-height: 110px;
     width: auto;
     margin-bottom: 6px;
-    filter: drop-shadow(0 2px 8px rgba(0,0,0,0.18));
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.18));
 }
 
 #lineage-text {
     opacity: 0;
     transition: opacity 0.4s ease;
     margin: 0;
-    font-family: 'Noto Kufi Arabic', sans-serif;
+    font-family: var(--font-heading);
     font-size: clamp(13px, 1.5vw, 15px);
     font-weight: 700;
     color: #3a2c1e;
@@ -625,21 +1046,136 @@ ul#search-results li:hover {
     line-height: 1.7;
     letter-spacing: 0.02em;
     max-width: 55vw;
-    /* Soft warm text-shadow for elegance */
     text-shadow:
-        0 1px 0 rgba(255,255,255,0.8),
+        0 1px 0 rgba(255, 255, 255, 0.8),
         0 2px 8px rgba(139, 115, 85, 0.25);
-    /* Subtle decorative underline */
     border-bottom: 1.5px solid rgba(139, 115, 85, 0.35);
     padding-bottom: 4px;
 }
 
+/* =========================================
+   Mobile Responsive
+   ========================================= */
 @media (max-width: 600px) {
+    .top-header {
+        padding: 10px 5px;
+    }
+
+    .top-header img {
+        max-height: 180px;
+        margin-bottom: 5px;
+    }
+
+    .search-wrapper {
+        width: min(210px, calc(100vw - 80px));
+    }
+
+    .search-container {
+        margin-top: 240px;
+    }
+
+    .search-container input[type="text"] {
+        width: 70%;
+        font-size: 14px;
+        padding: 8px;
+    }
+
     #header-logo {
         max-height: 70px;
     }
+
     #lineage-text {
         font-size: 11px;
         max-width: 65vw;
+    }
+}
+
+/* =========================================
+   Shared Date Parts (tree popup + deceased)
+   ========================================= */
+.death-date-parts {
+    display: inline-flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 0 4px;
+    white-space: nowrap;
+}
+
+.death-date-hijri,
+.death-date-miladi {
+    white-space: nowrap;
+}
+
+.death-date-sep {
+    white-space: nowrap;
+}
+
+@media (max-width: 480px) {
+    .death-date-parts {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 2px;
+    }
+
+    .death-date-sep {
+        display: none;
+    }
+}
+
+/* =========================================
+   Print Stylesheet
+   ========================================= */
+@media print {
+    body {
+        background-image: none !important;
+        background-color: #fff !important;
+        color: #000 !important;
+        overflow: visible !important;
+        height: auto !important;
+        min-height: 0 !important;
+    }
+
+    .floating-btn,
+    #floating-menu-container,
+    #right-controls,
+    #navbar-tree-actions,
+    #navbar-controls-dropdown,
+    #share-toast,
+    .back-btn-container,
+    #header-overlay,
+    #ui-wrapper,
+    #particles-canvas,
+    #sparkle-canvas {
+        display: none !important;
+    }
+
+
+    .content-container {
+        background: none !important;
+        backdrop-filter: none !important;
+        border: none !important;
+        box-shadow: none !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+
+    .bottom-footer {
+        box-shadow: none !important;
+    }
+
+    .footer-legend {
+        border-top: 1px solid #ccc !important;
+    }
+
+    .header img {
+        max-height: 150px !important;
+    }
+
+    a {
+        text-decoration: none !important;
+        color: inherit !important;
     }
 }

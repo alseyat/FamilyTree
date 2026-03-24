@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="ar">
+
+<head>
+    <link rel="preload" as="image" href="logo.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الوفيات — أسرة السياط</title>
+    <meta name="description" content="وفيات أسرة السياط — رحمهم الله وأسكنهم فسيح جناته">
+    <link rel="icon" href="favicon_io/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="favicon_io/favicon-32x32.png" type="image/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;700&family=Reem+Kufi+Ink:wght@400;700&family=Noto+Kufi+Arabic:wght@100..900&display=swap">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* ── Deceased-specific styles ── */
+        .deceased-count {
+            text-align: center;
+            margin-bottom: 24px;
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--color-text);
+            background: rgba(139, 115, 85, 0.1);
+            padding: 12px;
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(139, 115, 85, 0.2);
+        }
+
+        .deceased-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .deceased-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid var(--color-border);
+            border-radius: 12px;
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .deceased-item:hover {
+            background: rgba(255, 255, 255, 0.98);
+            border-color: rgba(139, 115, 85, 0.6);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transform: translateY(-1px);
+        }
+
+        .deceased-portrait {
+            width: 56px;
+            height: 56px;
+            border-radius: 6px;
+            object-fit: cover;
+            border: 2px solid var(--color-border-strong);
+            flex-shrink: 0;
+            background: rgba(139, 115, 85, 0.08);
+            cursor: zoom-in;
+        }
+
+        .deceased-portrait-placeholder {
+            width: 56px;
+            height: 56px;
+            border-radius: 6px;
+            border: 2px solid var(--color-border);
+            flex-shrink: 0;
+            background: rgba(139, 115, 85, 0.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            color: rgba(139, 115, 85, 0.5);
+        }
+
+        .deceased-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .deceased-name {
+            font-family: var(--font-heading);
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--color-text);
+            line-height: 1.5;
+        }
+
+        .deceased-rahma {
+            font-family: var(--font-body);
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--color-text-light);
+            margin-right: 6px;
+            display: block;
+        }
+
+        .deceased-date {
+            font-weight: bold;
+            font-size: 13px;
+            color: #7a6452;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .deceased-date::before {
+            content: '❖';
+            font-size: 11px;
+            opacity: 0.7;
+        }
+
+        .deceased-date-label {
+            font-family: var(--font-heading);
+            font-size: 12px;
+            font-weight: bold;
+            color: var(--color-text);
+            margin-left: 4px;
+        }
+
+        .deceased-arrow {
+            color: rgba(139, 115, 85, 0.5);
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        /* ── Portrait Lightbox ── */
+        #portrait-lightbox {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background: rgba(0, 0, 0, 0.82);
+            backdrop-filter: blur(6px);
+            align-items: center;
+            justify-content: center;
+        }
+
+        #portrait-lightbox.open {
+            display: flex;
+        }
+
+        #portrait-lightbox img {
+            width: min(90vw, 520px);
+            height: 85vh;
+            border-radius: var(--radius-md);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            object-fit: contain;
+            display: block;
+            animation: lb-in 0.2s ease;
+        }
+
+        @keyframes lb-in {
+            from { opacity: 0; transform: scale(0.92); }
+            to   { opacity: 1; transform: scale(1); }
+        }
+
+        #lightbox-close {
+            position: absolute;
+            top: 18px;
+            left: 18px;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.15);
+            border: none;
+            color: #fff;
+            font-size: 20px;
+            line-height: 1;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+
+        #lightbox-close:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .deceased-name {
+                font-size: 14px;
+            }
+
+            .deceased-date {
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Portrait lightbox -->
+    <div id="portrait-lightbox" role="dialog" aria-modal="true">
+        <button id="lightbox-close" aria-label="إغلاق">✕</button>
+        <img id="lightbox-img" src="" alt="">
+    </div>
+
+
+
+    <div class="content-container">
+        <h1 class="page-title">وفيات الأسرة</h1>
+        <ul class="deceased-list" id="deceased-list"></ul>
+        <div class="back-btn-container">
+            <a href="tree.html" class="back-btn">العودة إلى شجرة الأسرة</a>
+        </div>
+    </div>
+
+    <footer class="bottom-footer"></footer>
+
+    <script type="module">
+        let people;
+        try {
+            const module = await import('./alseyat.js');
+            people = module.people;
+        } catch (e) {
+            document.querySelector('.content-container').innerHTML = '<p style="text-align:center;color:#a33;font-size:18px;padding:40px;">تعذّر تحميل البيانات. يرجى تحديث الصفحة.</p>';
+            throw e;
+        }
+
+        const map = {};
+        people.forEach(p => { map[p.id] = p; });
+
+        function getFullName(person) {
+            const parts = [];
+            let current = person;
+            while (current) {
+                parts.push(current.name);
+                current = current.parentId !== null ? map[current.parentId] : null;
+            }
+            return parts.join(' بن ');
+        }
+
+        const hijriMonths = {
+            'محرم': 1, 'صفر': 2, 'ربيع الأول': 3, 'ربيع الثاني': 4,
+            'جمادى الأولى': 5, 'جمادى الآخرة': 6, 'رجب': 7, 'شعبان': 8,
+            'رمضان': 9, 'شوال': 10, 'ذو القعدة': 11, 'ذو الحجة': 12
+        };
+
+        function getHijriSortKey(death) {
+            if (!death) return 0;
+            const yearMatch = death.match(/(\d{4})\s*هـ/);
+            const dayMatch = death.match(/^(\d+)/);
+            const year = yearMatch ? parseInt(yearMatch[1]) : 0;
+            const day = dayMatch ? parseInt(dayMatch[1]) : 0;
+            let month = 0;
+            for (const [name, num] of Object.entries(hijriMonths)) {
+                if (death.includes(name)) { month = num; break; }
+            }
+            return year * 10000 + month * 100 + day;
+        }
+
+
+        const deceased = people
+            .filter(p => p.death !== undefined && p.death !== null)
+            .map(p => ({
+                id: p.id,
+                name: p.name,
+                fullName: getFullName(p),
+                death: p.death || null,
+                portrait: p.portrait || null,
+            }))
+            .sort((a, b) => {
+                const aHasDate = !!a.death;
+                const bHasDate = !!b.death;
+                if (!aHasDate && !bHasDate) return a.name.localeCompare(b.name, 'ar');
+                if (!aHasDate) return -1;
+                if (!bHasDate) return 1;
+                return getHijriSortKey(a.death) - getHijriSortKey(b.death);
+            });
+
+        // Lightbox
+        const lightbox = document.getElementById('portrait-lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+
+        function openLightbox(src, alt) {
+            lightboxImg.src = src;
+            lightboxImg.alt = alt;
+            lightbox.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            lightbox.classList.remove('open');
+            document.body.style.overflow = '';
+            lightboxImg.src = '';
+        }
+
+        document.getElementById('lightbox-close').addEventListener('click', closeLightbox);
+        lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLightbox(); });
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+
+        // Render
+        const list = document.getElementById('deceased-list');
+        deceased.forEach(person => {
+            const li = document.createElement('li');
+
+            const portraitHTML = person.portrait
+                ? `<img class="deceased-portrait" data-portrait-id="${person.portrait}" alt="${person.name}" style="display:none;">
+                   <div class="deceased-portrait-placeholder">❖</div>`
+                : `<div class="deceased-portrait-placeholder">❖</div>`;
+
+            const dateHTML = person.death ? (() => {
+                const parts = person.death.split(' - ');
+                const hijri = parts[0] || '';
+                const miladi = parts[1] || '';
+                return `<div class="deceased-date">
+                    <span class="deceased-date-label">الوفاة:</span>
+                    <span class="death-date-parts">
+                        <span class="death-date-hijri">${hijri}</span>
+                        ${miladi ? `<span class="death-date-sep"> - </span><span class="death-date-miladi">${miladi}</span>` : ''}
+                    </span>
+                </div>`;
+            })() : '';
+
+            li.innerHTML = `
+                ${portraitHTML}
+                <div class="deceased-info">
+                    <div class="deceased-name">${person.fullName}<span class="deceased-rahma">- رحمه الله وأسكنه فسيح جناته -</span></div>
+                    ${dateHTML}
+                </div>
+                <div class="deceased-arrow">←</div>
+            `;
+
+            li.classList.add('deceased-item');
+
+            if (person.portrait) {
+                const img = li.querySelector('.deceased-portrait');
+                const placeholder = li.querySelector('.deceased-portrait-placeholder');
+                if (img) {
+                    const src = `assets/${person.portrait}.jpg`;
+                    img.onload = () => {
+                        img.style.display = '';
+                        if (placeholder) placeholder.style.display = 'none';
+                        img.addEventListener('click', e => {
+                            e.stopPropagation();
+                            openLightbox(src, person.name);
+                        });
+                    };
+                    img.src = src;
+                }
+            }
+
+            li.addEventListener('click', () => {
+                window.location.href = `tree.html?focus=${encodeURIComponent(person.fullName)}`;
+            });
+
+            list.appendChild(li);
+        });
+    </script>
+    <script src="particles.js"></script>
+    <script src="menu.js"></script>
+</body>
+
+</html>
