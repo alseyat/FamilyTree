@@ -109,8 +109,52 @@ let root = d3.hierarchy(data);
 root.x0 = width / 2;
 root.y0 = 0;
 
-const overlay = document.getElementById('header-overlay');
-let initialVerticalOffset = (overlay ? overlay.offsetHeight : 0) + 40;
+// Header (logo + lineage text) is rendered inside the SVG so it scrolls/zooms with the tree.
+// logo (10 top padding + logo height + 16 gap + text height + bottom padding)
+const HEADER_HEIGHT = isMobile() ? (10 + 70 + 16 + 120 + 20) : (10 + 110 + 16 + 120 + 20);
+let initialVerticalOffset = HEADER_HEIGHT +10;
+
+// Render header inside the SVG but OUTSIDE the scaled svgGroup.
+// This way the header is never scaled by zoom — it always stays full size.
+// It still scrolls with the tree because it is part of the same SVG element.
+const headerGroup = svg.append('g').attr('class', 'tree-header-group');
+
+const LOGO_W = 180, LOGO_H = 110;
+const LOGO_W_M = 120, LOGO_H_M = 70;
+
+const headerLogo = headerGroup.append('image')
+    .attr('href', 'tree.png')
+    .attr('width', LOGO_W)
+    .attr('height', LOGO_H)
+    .attr('x', -LOGO_W / 2)
+    .attr('y', 10);
+
+// foreignObject for Arabic text — HTML renders RTL correctly on mobile
+const TEXT_FO_W = 700, TEXT_FO_H = 120;
+const TEXT_FO_W_M = 320, TEXT_FO_H_M = 120;
+
+const textFO = headerGroup.append('foreignObject')
+    .attr('width', TEXT_FO_W)
+    .attr('height', TEXT_FO_H)
+    .attr('x', -TEXT_FO_W / 2)
+    .attr('y', LOGO_H + 16);
+
+const textDiv = textFO.append('xhtml:div')
+    .style('width', TEXT_FO_W + 'px')
+    .style('text-align', 'center')
+    .style('direction', 'rtl')
+    .style('font-family', 'var(--font-heading)')
+    .style('font-weight', '700')
+    .style('color', '#3a2c1e')
+    .style('font-size', '15px')
+    .style('line-height', '1.7')
+    .style('letter-spacing', '0.02em')
+    .style('border-bottom', '1.5px solid rgba(139,115,85,0.35)')
+    .style('padding-bottom', '6px')
+    .style('box-sizing', 'border-box')
+    .style('pointer-events', 'none')
+    .html(`آل سياط من عشيرة أهل الحجلا من الزقاريط من الربيعية من عبدة من قبيلة شمر الطائية<br>
+           وهم ذرية سياط بن عودة بن محمد بن علّيق بن محمد بن سليمان (جد الحجلا) بن نافع بن عمار بن زقروط الربيعي العبدي الشمري`);
 let initialHorizontalOffset = width / 2 + 19;
 let initialHorizontalForMobile = 79;
 
@@ -202,9 +246,39 @@ function update(source, center = false) {
     currentAdjustment = baseAdjustment;
 
     const requiredWidth = currentAdjustment + (maxX + hOffset) * zoomLevel + 300;
-    const requiredHeight = 230 + (maxY + initialVerticalOffset) * zoomLevel + 400;
 
-    svgGroup.attr('transform', `translate(${currentAdjustment}, ${VERTICAL_CANVAS_PAD}) scale(${zoomLevel})`);
+    // Push the tree group down enough so the root never rises above the header.
+    // The header is fixed-size (not in svgGroup), so its bottom is always at ~HEADER_HEIGHT px.
+    // svgBaseY ensures: svgBaseY + initialVerticalOffset * zoomLevel >= HEADER_HEIGHT + 40
+    const svgBaseY = Math.max(VERTICAL_CANVAS_PAD,
+        HEADER_HEIGHT + 40 - initialVerticalOffset * zoomLevel);
+
+    const requiredHeight = svgBaseY + (maxY + initialVerticalOffset) * zoomLevel + 400;
+
+    svgGroup.attr('transform', `translate(${currentAdjustment}, ${svgBaseY}) scale(${zoomLevel})`);
+
+    // Position header centered on root's screen X. It lives in the SVG (not svgGroup)
+    // so its Y=VERTICAL_CANVAS_PAD is in SVG space — always at the top, never scaled.
+    const mobile = isMobile();
+    const logoW = mobile ? LOGO_W_M : LOGO_W;
+    const logoH = mobile ? LOGO_H_M : LOGO_H;
+    const foW = mobile ? TEXT_FO_W_M : TEXT_FO_W;
+    const foH = mobile ? TEXT_FO_H_M : TEXT_FO_H;
+    const fSize = mobile ? '12px' : '15px';
+    const rootScreenX = currentAdjustment + (root.x + hOffset) * zoomLevel;
+    headerGroup.attr('transform', `translate(${rootScreenX}, ${VERTICAL_CANVAS_PAD})`);
+    headerLogo
+        .attr('width', logoW)
+        .attr('height', logoH)
+        .attr('x', -logoW / 2);
+    textFO
+        .attr('width', foW)
+        .attr('height', foH)
+        .attr('x', -foW / 2)
+        .attr('y', logoH + 16);
+    textDiv
+        .style('width', foW + 'px')
+        .style('font-size', fSize);
 
     d3.select('#tree-container svg')
         .attr('width', Math.max(window.innerWidth, requiredWidth))
@@ -701,6 +775,7 @@ function collapseTree() {
 // =========================================
 //  Zoom
 // =========================================
+
 function applyZoom(newZoom) {
     const treeContainer = document.getElementById('tree-container');
     const centerX = treeContainer.scrollLeft + (treeContainer.clientWidth / 2);
@@ -730,6 +805,7 @@ function zoomOut() {
 // =========================================
 //  Event Bindings
 // =========================================
+
 document.addEventListener('DOMContentLoaded', function () {
     const searchIconBtn = document.getElementById('search-icon-btn');
     const searchWrapper = document.getElementById('search-wrapper-floating');
@@ -788,17 +864,14 @@ update(root);
 // =========================================
 const uiWrapper = document.getElementById('ui-wrapper');
 const treeContainerElement = document.getElementById('tree-container');
-const headerOverlay = document.getElementById('header-overlay');
 
 treeContainerElement.addEventListener('scroll', () => {
     const { scrollTop, scrollHeight, clientHeight } = treeContainerElement;
 
     if (scrollTop > 50) {
         uiWrapper.classList.add('hidden');
-        if (headerOverlay) headerOverlay.classList.add('hidden');
     } else if (scrollTop <= 5 && scrollHeight > clientHeight + 100) {
         uiWrapper.classList.remove('hidden');
-        if (headerOverlay) headerOverlay.classList.remove('hidden');
     }
 });
 
