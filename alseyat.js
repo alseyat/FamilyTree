@@ -175,6 +175,7 @@ const people = [
   // أبناء نواف (id: 60)
   { id:  61, name: "إبراهيم",  parentId: 60 },
   { id:  62, name: "ضاري",  parentId: 60 },
+  { id:  601, name: "فيصل",  parentId: 60 },
 
   // أبناء إبراهيم (id: 59)
   { id:  63, name: "نايف",  parentId: 59 },
