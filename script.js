@@ -663,7 +663,6 @@ function displaySearchResults(query) {
             focusOnNodeFromSearch(fullName);
             document.getElementById('search-results').style.display = 'none';
             document.getElementById('search-wrapper-floating').style.display = 'none';
-            document.getElementById('search-icon-btn').style.display = 'flex';
             document.getElementById('search-box').value = '';
         });
         searchResults.appendChild(li);
@@ -814,7 +813,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const searchContainer = document.getElementById('floating-search-container');
 
     searchIconBtn.addEventListener('click', function (event) {
-        searchIconBtn.style.display = 'none';
         searchWrapper.style.display = 'block';
         searchBox.focus();
         event.stopPropagation();
@@ -834,10 +832,10 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     document.addEventListener('click', function (event) {
-        if (!searchContainer.contains(event.target)) {
+        if (!searchContainer.contains(event.target) &&
+            !searchWrapper.contains(event.target)) {
             searchWrapper.style.display = 'none';
             searchResults.style.display = 'none';
-            searchIconBtn.style.display = 'flex';
         }
     });
 });

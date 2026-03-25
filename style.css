@@ -728,10 +728,10 @@ body.tree-page {
 }
 
 .search-wrapper {
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: min(250px, calc(100vw - 80px));
+    position: fixed;
+    top: 96px; /* matches #right-controls top */
+    right: 73px; /* 20px right-controls offset + 45px button width + 8px gap */
+    width: 250px;
     z-index: 1001;
 }
 
