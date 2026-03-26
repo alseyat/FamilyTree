@@ -210,7 +210,7 @@ const people = [
   { id:  78, name: "سميحان", death: "1377 هـ - 1957 / 1958 م", portrait: 78,  parentId: 77 },
 
   // أبناء سميحان (id: 78)
-  { id:  79, name: "سعود",  parentId: 78 },
+  { id:  79, name: "سعود", portrait: 79,  parentId: 78 },
 
   // أبناء سعود (id: 79)
   { id:  80, name: "طارق",  parentId: 79 },
