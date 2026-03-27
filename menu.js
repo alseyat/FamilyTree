@@ -130,7 +130,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // ── Inject universal footer ──
     const footer = document.querySelector('footer.bottom-footer');
     if (footer) {
-        const isTreePage = window.location.pathname.endsWith('tree.html');
+        const isTreePage = window.location.pathname.endsWith('tree.html') || window.location.pathname.endsWith('/tree');
         const legendHTML = isTreePage ? `
             <div class="footer-legend">
                 <div class="legend-item">
