@@ -488,6 +488,8 @@ const people = [
   { id: 192, name: "حمود",  parentId: 187 },
   { id: 193, name: "فيصل",  parentId: 187 },
 
+  { id: 1821, name: "محمد",  parentId: 182 },
+
   // أبناء محمد (id: 181)
   { id: 194, name: "الحميدي", death: "6 ذو الحجة 1434 هـ - 11 أكتوبر 2013 م", portrait: 194,  parentId: 181 },
   // { id: 194, name: "الحميدي", death: "6 / 12 / 1434 هـ - 11 / 10 / 2013 م", portrait: 194,  parentId: 181 },
