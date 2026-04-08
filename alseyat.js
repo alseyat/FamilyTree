@@ -260,7 +260,7 @@ const people = [
 
   // أبناء صالح (id: 98)
   { id: 101, name: "هشام",  parentId: 98 },
-  { id: 102, name: "معتصم",  parentId: 98 },
+  { id: 102, name: "المعتصم",  parentId: 98 },
   { id: 103, name: "عبدالملك",  parentId: 98 },
 
   // أبناء عجب (id: 77)
